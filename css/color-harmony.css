@@ -1,0 +1,165 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+* {
+    margin-bottom: 0;
+}
+.section {
+    margin: 0;
+    padding: var(--section-spacing) 0;
+    position: relative;
+    overflow: hidden;
+    border: none;
+}
+
+.section + .section {
+    margin-top: 0;
+    padding-top: var(--section-spacing);
+}
+
+.hero-section {
+    background: linear-gradient(135deg, var(--lavender-light), var(--lavender));
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.svg-wave {
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 120px;
+    display: block;
+    z-index: 5;
+}
+
+.section-white {
+    background-color: var(--mint-light);
+    position: relative;
+    z-index: 1;
+}
+
+.section-light {
+    background-color: var(--off-white);
+    position: relative;
+    z-index: 1;
+}
+
+.section-colored {
+    background: linear-gradient(135deg, var(--lavender-light), var(--mint-light));
+    position: relative;
+    z-index: 1;
+}
+
+/* Color-aligned sections for perfect transitions */
+.color-aligned {
+    position: relative;
+}
+
+.color-aligned::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 2px; /* Overlap to prevent any gap */
+    background-color: inherit;
+    z-index: 1;
+}
+
+/* Specific section transitions */
+.hero-section + .color-aligned {
+    margin-top: -1px;
+}
+
+.gallery-section.color-aligned {
+    background-color: transparent;
+}
+
+.donate-section.color-aligned {
+    background: linear-gradient(to bottom, #f0f7ff, #e8f5fe);
+}
+
+.contact-section.color-aligned {
+    background: linear-gradient(to bottom, #e8f5fe, #f8f9ff);
+}
+
+/* Contact section specific styling */
+.contact-section {
+    background: linear-gradient(to bottom, #f8f9ff, #e8f5fe);
+    margin-top: 0;
+    padding-top: var(--section-spacing);
+    border-top: none;
+    position: relative;
+    z-index: 2;
+}
+
+.section::before,
+.section::after {
+    content: '';
+    display: block;
+    height: 1px;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    background-color: inherit;
+}
+
+.section::before {
+    top: 0;
+}
+
+.section::after {
+    bottom: 0;
+}
+
+footer {
+    margin-top: 0;
+    padding-top: 2rem;
+    background-color: var(--navy-blue);
+    color: var(--text-light);
+    border-top: none;
+}
+
+@media (max-width: 768px) {
+    .section {
+        padding: 3rem 0;
+    }
+    
+    .section + .section {
+        padding-top: 3rem;
+        margin-top: -1px; /* Ensure no gap between sections */
+    }
+    
+    .svg-wave {
+        height: 80px;
+    }
+    
+    .color-aligned::after {
+        height: 3px;
+    }
+    
+    body {
+        min-height: 100vh;
+        position: relative;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+    .section {
+        padding: 2.5rem 0;
+    }
+    
+    .section + .section {
+        padding-top: 2.5rem;
+    }
+    
+    .svg-wave {
+        height: 60px;
+    }
+}

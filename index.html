@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Noor Charitable Trust is dedicated to transforming lives through compassion, healthcare, education, and sustainable development.">
+    <meta name="keywords" content="charity, non-profit, healthcare, education, community development">
+    <meta name="author" content="Noor Charitable Trust">
+    <title>Noor Charitable Trust</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/contact-styles.css">
+    <link rel="stylesheet" href="css/gallery.css">
+    <link rel="stylesheet" href="css/values-grid.css">
+    <link rel="stylesheet" href="css/story-section.css">
+    <link rel="stylesheet" href="css/donation.css">
+    <link rel="stylesheet" href="css/color-harmony.css">
+    <link rel="stylesheet" href="css/gallery-fix.css">
+    <link rel="stylesheet" href="css/soft-pastel-theme.css">
+    <link rel="stylesheet" href="css/bank-details.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&family=Source+Sans+Pro:wght@400;600;700&family=Poppins:wght@500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</head>
+<body>
+    <header class="navbar">
+        <div class="nav-container">
+            <!-- Mobile Hamburger Menu (only visible on mobile) -->
+            <button class="hamburger" aria-label="Toggle navigation menu" aria-expanded="false" id="hamburger-menu">
+                <div class="hamburger-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+            
+            <!-- Logo/Title -->
+            <div class="logo-container">
+                <h1 class="main-title">Noor Charitable Trust</h1>
+            </div>
+            
+            <!-- Mobile Navigation (hidden by default, shown when hamburger is clicked) -->
+            <nav class="nav-links" id="nav-links">
+                <a href="#about" class="nav-link">About</a>
+                <a href="#donate" class="nav-link">Donate</a>
+                <a href="#our-impact" class="nav-link">Our Impact</a>
+                <a href="#gallery" class="nav-link">Gallery</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </nav>
+            
+            <!-- Desktop Navigation (only visible on desktop) -->
+            <nav class="desktop-nav" id="desktop-nav">
+                <a href="#about" class="nav-link">About</a>
+                <a href="#donate" class="nav-link">Donate</a>
+                <a href="#our-impact" class="nav-link">Our Impact</a>
+                <a href="#gallery" class="nav-link">Gallery</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-section">
+            <div class="container-lg">
+                <div class="hero-content">
+                    <h1>Transforming Lives Through Compassion</h1>
+                    <p>Join us in our mission to create lasting positive change in communities across the globe.</p>
+                    <a href="#donate" class="cta-button main-action-btn make-difference-btn">Make a Difference Today</a>
+                </div>
+            </div>
+
+        </section>
+
+        <section id="impact-stats" class="section section-white color-aligned">
+            <div class="container">
+                <div class="impact-grid">
+                    <div class="impact-stat">
+                        <h3>50,000+</h3>
+                        <p>Lives Impacted</p>
+                    </div>
+                    <div class="impact-stat">
+                        <h3>20+</h3>
+                        <p>Active Projects</p>
+                    </div>
+                    <div class="impact-stat">
+                        <h3>10+</h3>
+                        <p>Countries Reached</p>
+                    </div>
+                    <div class="impact-stat">
+                        <h3>$1 lakh+</h3>
+                        <p>Funds Raised</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="our-impact" class="section section-white color-aligned">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-heading">Our Impact & Work</h2>
+                    <p>Discover the real difference we make through our focused initiatives.</p>
+                </div>
+                <div class="work-showcase">
+                    <div class="work-item">
+                        <img src="images/health-camps.jpg" alt="Health Camps">
+                        <div class="work-content">
+                            <h3>Health Camps</h3>
+                            <p>Providing free medical check-ups and essential medicines in remote areas.</p>
+                            <button class="button learn-more-btn" data-modal="healthCampsModal">Learn More</button>
+                        </div>
+                    </div>
+                    <div class="work-item">
+                        <img src="images/women-empowerment.jpg" alt="Women Empowerment">
+                        <div class="work-content">
+                            <h3>Women Empowerment</h3>
+                            <p>Empowering women with education, resources, and motivational support.</p>
+                            <button class="button learn-more-btn" data-modal="womenEmpowermentModal">Learn More</button>
+                        </div>
+                    </div>
+                    <div class="work-item">
+                        <img src="images/environment.jpg" alt="Environment">
+                        <div class="work-content">
+                            <h3>Environment</h3>
+                            <p>Planting trees and organizing clean-up drives for sustainability.</p>
+                            <button class="button learn-more-btn" data-modal="environmentModal">Learn More</button>
+                        </div>
+                    </div>
+                    <div class="work-item">
+                        <img src="images/feeding-animals.jpg" alt="Feeding Animals">
+                        <div class="work-content">
+                            <h3>Feeding Animals</h3>
+                            <p>Caring for stray animals with food and medical support.</p>
+                            <button class="button learn-more-btn" data-modal="feedingAnimalsModal">Learn More</button>
+                        </div>
+                    </div>
+                    <div class="work-item">
+                        <img src="images/covid-pandemic.jpg" alt="COVID-19 Pandemic">
+                        <div class="work-content">
+                            <h3>COVID-19 Pandemic</h3>
+                            <p>Providing free medications and essentials during the crisis.</p>
+                            <button class="button learn-more-btn" data-modal="covidPandemicModal">Learn More</button>
+                        </div>
+                    </div>
+                    <div class="work-item">
+                        <img src="images/orphans.jpg" alt="Orphans">
+                        <div class="work-content">
+                            <h3>Orphans</h3>
+                            <p>Supporting orphans with shelter, education, and care.</p>
+                            <button class="button learn-more-btn" data-modal="orphansModal">Learn More</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- Modals for Learn More -->
+        <div id="healthCampsModal" class="modal">
+            <div class="modal-content">
+                <span class="close" aria-label="Close modal">×</span>
+                <h2>Health Camps</h2>
+                <p>Our health camps bring vital medical services to underserved rural and urban communities. We organize regular camps offering free consultations, diagnostic tests, and essential medications. Led by experienced doctors and volunteers, these camps address common health issues, provide preventive care education, and refer critical cases to hospitals. Since 2020, we’ve conducted over 50 camps, serving more than 10,000 individuals.</p>
+            </div>
+        </div>
+        <div id="womenEmpowermentModal" class="modal">
+            <div class="modal-content">
+                <span class="close" aria-label="Close modal">×</span>
+                <h2>Women Empowerment</h2>
+                <p>Our women empowerment programs focus on education, skill development, and emotional support. We provide vocational training in tailoring, handicrafts, and entrepreneurship, enabling women to achieve financial independence. Additionally, we conduct workshops on health, legal rights, and leadership, fostering confidence and community leadership. Over 1,000 women have benefited from our initiatives since inception.</p>
+            </div>
+        </div>
+        <div id="environmentModal" class="modal">
+            <div class="modal-content">
+                <span class="close" aria-label="Close modal">×</span>
+                <h2>Environment</h2>
+                <p>Our environmental initiatives aim to create a sustainable future. We organize tree-planting drives, having planted over 5,000 trees across communities. Our clean-up campaigns target rivers, parks, and streets, raising awareness about waste management. We also educate schools and communities on eco-friendly practices, contributing to a greener planet.</p>
+            </div>
+        </div>
+        <div id="feedingAnimalsModal" class="modal">
+            <div class="modal-content">
+                <span class="close" aria-label="Close modal">×</span>
+                <h2>Feeding Animals</h2>
+                <p>We care for stray and abandoned animals by providing food, medical care, and shelter. Our volunteers distribute meals daily to street dogs and cats, while our veterinary camps offer vaccinations and treatments. We’ve supported over 2,000 animals, promoting compassion and coexistence in communities.</p>
+            </div>
+        </div>
+        <div id="covidPandemicModal" class="modal">
+            <div class="modal-content">
+                <span class="close" aria-label="Close modal">×</span>
+                <h2>COVID-19 Pandemic</h2>
+                <p>During the COVID-19 crisis, we distributed free medications, oxygen kits, and food supplies to thousands of affected families. Our team worked tirelessly in high-risk areas, providing PPE kits to frontline workers and raising awareness about safety protocols. Our efforts reached over 15,000 individuals during the pandemic’s peak.</p>
+            </div>
+        </div>
+        <div id="orphansModal" class="modal">
+            <div class="modal-content">
+                <span class="close" aria-label="Close modal">×</span>
+                <h2>Orphans</h2>
+                <p>Our orphan care program provides a safe haven for children without families. We offer shelter, nutritious meals, education, and emotional support through our orphanage. Our dedicated staff ensures each child receives personalized care, helping them build a brighter future. Currently, we support over 100 children with holistic care.</p>
+            </div>
+        </div>
+
+        <section id="gallery" class="section gallery-section color-aligned">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-heading">Our Gallery</h2>
+                    <p>Glimpses of our work and impact in the community</p>
+                </div>
+                
+                <div class="gallery-grid">
+                    <!-- Gallery Item 1 -->
+                    <div class="gallery-item" style="--animation-order: 1;">
+                        <img src="images/gallery/photo1.jpg" alt="Gallery Image 1">
+                        <div class="gallery-item-caption">
+                            <h3>Our Work</h3>
+                            <p>Making a difference in the community</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Gallery Item 2 -->
+                    <div class="gallery-item" style="--animation-order: 2;">
+                        <img src="images/gallery/photo2.jpg" alt="Gallery Image 2">
+                        <div class="gallery-item-caption">
+                            <h3>Community Impact</h3>
+                            <p>Supporting those in need</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Gallery Item 3 -->
+                    <div class="gallery-item" style="--animation-order: 3;">
+                        <img src="images/gallery/photo3.jpg" alt="Gallery Image 3">
+                        <div class="gallery-item-caption">
+                            <h3>Health Initiatives</h3>
+                            <p>Providing essential healthcare services</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Gallery Item 4 -->
+                    <div class="gallery-item" style="--animation-order: 4;">
+                        <img src="images/gallery/photo4.jpg" alt="Gallery Image 4">
+                        <div class="gallery-item-caption">
+                            <h3>Education Programs</h3>
+                            <p>Empowering through knowledge</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Gallery Item 5 -->
+                    <div class="gallery-item" style="--animation-order: 5;">
+                        <img src="images/gallery/photo5.jpg" alt="Gallery Image 5">
+                        <div class="gallery-item-caption">
+                            <h3>Community Events</h3>
+                            <p>Bringing people together</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Gallery Item 6 -->
+                    <div class="gallery-item" style="--animation-order: 6;">
+                        <img src="images/gallery/photo6.jpg" alt="Gallery Image 6">
+                        <div class="gallery-item-caption">
+                            <h3>Volunteer Work</h3>
+                            <p>Making a positive impact</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Gallery Item 7 -->
+                    <div class="gallery-item" style="--animation-order: 7;">
+                        <img src="images/gallery/photo7.jpg" alt="Gallery Image 7">
+                        <div class="gallery-item-caption">
+                            <h3>Outreach Programs</h3>
+                            <p>Extending help to remote areas</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Gallery Item 8 -->
+                    <div class="gallery-item" style="--animation-order: 8;">
+                        <img src="images/gallery/photo8.jpg" alt="Gallery Image 8">
+                        <div class="gallery-item-caption">
+                            <h3>Relief Work</h3>
+                            <p>Providing support during difficult times</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Gallery Modal for image preview -->
+            <div id="galleryModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" aria-label="Close modal">×</span>
+                    <img id="modalImage" src="" alt="Gallery Image Preview">
+                    <div id="modalCaption"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="donate" class="section donate-section color-aligned">
+            <div class="donate-container">
+                <div class="donate-header">
+                    <h2>Support Our Mission</h2>
+                    <p>Your contribution helps us provide healthcare, education, and hope to those who need it most.</p>
+                </div>
+                
+                <div class="bank-details-container">
+                    <h3 class="bank-details-title">Bank Account Details</h3>
+                    <ul class="bank-details-list">
+                        <li class="bank-details-item">
+                            <span class="detail-label">Branch</span>
+                            <span class="detail-value">Kadapa</span>
+                        </li>
+                        <li class="bank-details-item">
+                            <span class="detail-label">Account Holder Name</span>
+                            <span class="detail-value">NOOR CHARITABLE TRUST</span>
+                        </li>
+                        <li class="bank-details-item">
+                            <span class="detail-label">Account Number</span>
+                            <span class="detail-value">0207102000010371</span>
+                        </li>
+                        <li class="bank-details-item">
+                            <span class="detail-label">IFSC Code</span>
+                            <span class="detail-value">IBKL0000207</span>
+                        </li>
+                    </ul>
+                </div>
+                </div>
+                
+
+            </div>
+        </section>
+
+        <section id="about" class="section section-white">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-heading">About Us</h2>
+                    <p>Learn about our journey, mission, and the dedicated team working to make a difference.</p>
+                </div>
+                <div class="about-content grid grid-2">
+                    <div>
+                        <h3>Our Story</h3>
+                        <p>Founded in 2020, Noor Charitable Trust has been at the forefront of creating positive change in communities worldwide.</p>
+                        <h3>Our Mission</h3>
+                        <p>To empower communities through sustainable development, education, and healthcare initiatives.</p>
+                        <h3>Our Values</h3>
+                        <div class="values-grid">
+                            <div class="value-item"><strong>Compassion:</strong> We act with empathy and understanding</div>
+                            <div class="value-item"><strong>Integrity:</strong> We maintain transparency and accountability</div>
+                            <div class="value-item"><strong>Innovation:</strong> We seek creative solutions to challenges</div>
+                            <div class="value-item"><strong>Sustainability:</strong> We create lasting positive change</div>
+                        </div>
+                        <button type="button" class="cta-button main-action-btn purple-btn animated-btn" id="openFullStoryModal">Read Our Full Story</button>
+                    </div>
+                    <div class="about-image-grid">
+                        <img src="images/sections/about-1.jpg" alt="Community Work">
+                        <img src="images/sections/about-2.jpg" alt="Education Initiative">
+                        <img src="images/sections/about-3.jpg" alt="Healthcare Program">
+                        <img src="images/sections/about-4.jpg" alt="Team Work">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div id="fullStoryModal" class="modal">
+            <div class="modal-content">
+                <span class="close" aria-label="Close modal">×</span>
+                <div class="modal-scrollable">
+                    <img src="images/dr-noori-parveen.jpg" alt="Dr. Noori Parveen">
+                    <h2>Dr. Noori Parveen: The ₹10 Doctor with a Heart of Gold</h2>
+                    <p>In the heart of India, where hope often battles hardship, shines the inspiring story of Dr. Noori Parveen, fondly known as the “₹10 Doctor.” A General Physician by profession and a humanitarian by heart, Dr. Noori has been a beacon of light for the underprivileged since 2016.</p>
+                    <p>Raised with values rooted in compassion and service, Noori always dreamed of healing more than just bodies—she wanted to heal communities. In 2020, after years of dedicated work, she officially registered her dream as Noori’s Hospitals, a charitable trust aimed at providing affordable healthcare to all. Her unique initiative of charging just ₹10 for consultations earned her the title “₹10 Doctor,” a symbol of accessible healthcare for the poor.</p>
+                    <p>But Dr. Noori’s impact reaches far beyond hospital walls.</p>
+                    <p>She runs an orphanage home, offering love, education, and shelter to children who have no one else. Her hands, though constantly busy healing patients, also find time to plant trees, clean streets, and care for animals. Through environmental campaigns and awareness drives, she has nurtured not only lives but also the earth.</p>
+                    <p>From organizing free health camps in remote villages to distributing books and clothes to the needy, Noori’s life is a living example of selflessness. During the harrowing days of the COVID-19 pandemic, while many stayed behind closed doors, she stepped out—fearless and determined. She treated thousands, offered food and essentials to struggling families, and gave a voice to the voiceless.</p>
+                    <p>Her story doesn’t end there. Dr. Noori regularly holds motivational talks for poor children and struggling communities, encouraging them to believe in education, hope, and hard work. To them, she’s not just a doctor—she’s a guide, a sister, a savior.</p>
+                    <p>In a world often driven by profit, Dr. Noori Parveen stands as a powerful reminder that kindness still exists. Her work is a living testimony that one woman with a strong will and a compassionate heart can change countless lives.</p>
+                    <p style="font-weight: bold; color: #0277bd; font-size: 1.1rem; margin-top: 1.5rem;">She is not just a doctor.<br>She is a movement.<br>She is Dr. Noori Parveen—the doctor who treats with medicine and heals with love.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <section id="contact" class="section section-white contact-section color-aligned">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-heading">Contact Us</h2>
+                <p>Have questions or want to get involved? Reach out to us.</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <h3>Email</h3>
+                        <p><a href="mailto:noorcharitabletrust@gmail.com">noorcharitabletrust@gmail.com</a></p>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <h3>Phone</h3>
+                        <p><a href="tel:+919876543210">+91 98765 43210</a></p>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <h3>Address</h3>
+                        <p>NOOR CHARITABLE TRUST , D.NO: 15/273, AMEEN PEER DARGAH ROA ,BESIDE
+                            WATER TANK,516001,KADAPA,AP,India</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p> 2025 Noor Charitable Trust. All rights reserved.</p>
+            <p>Developed by Uday Rama Rao</p>
+            <div class="footer-links">
+                <a href="#about">About</a>
+                <a href="#donate">Donate</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Donation Loading Overlay -->
+    <div class="donation-loading" id="donationLoading">
+        <div class="spinner"></div>
+    </div>
+
+
+    <script src="js/main.js"></script>
+    <script src="js/gallery.js"></script>
+
+    <!-- Women Empowerment Modal -->
+    <div id="womenEmpowermentModal" class="modal">
+        <div class="modal-content">
+            <span class="close" aria-label="Close modal">×</span>
+            <h2>Women Empowerment</h2>
+            <p>Our women empowerment initiatives focus on education, skill development, and financial independence. We provide vocational training, entrepreneurship programs, and support networks to help women achieve self-sufficiency and leadership roles in their communities.</p>
+        </div>
+    </div>
+
+</body>
+</html>

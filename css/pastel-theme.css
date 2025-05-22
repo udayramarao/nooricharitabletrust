@@ -1,0 +1,158 @@
+/* 
+ * Soft Light Theme CSS
+ * This file applies a soft, light-themed color scheme to the entire website
+ * using pastel blues, light pinks, gentle purples, and subtle grays
+ */
+
+/* General background colors */
+body {
+    background-color: var(--bg-pink-lightest);
+}
+
+/* Section backgrounds */
+.section {
+    background-color: var(--bg-lavender-lightest);
+}
+
+.section:nth-child(odd) {
+    background-color: var(--bg-pink-lightest);
+}
+
+.section:nth-child(even) {
+    background-color: var(--bg-blue-lightest);
+}
+
+/* Hero section */
+.hero-section {
+    background: linear-gradient(135deg, var(--bg-pink-lightest), var(--bg-lavender-lightest));
+}
+
+/* Impact stats section */
+#impact-stats {
+    background-color: var(--accent-peach);
+}
+
+/* Our impact section */
+#our-impact {
+    background-color: var(--accent-mint);
+}
+
+/* Gallery section */
+.gallery-section {
+    background-color: var(--bg-purple-lightest) !important;
+}
+
+/* Donate section */
+.donate-section {
+    background: linear-gradient(to bottom, var(--bg-pink-lightest), var(--accent-peach));
+}
+
+.donate-container {
+    background-color: var(--bg-lavender-lightest);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    border-radius: var(--radius-lg);
+    padding: 3rem;
+    max-width: 800px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, var(--bg-pink-lightest), var(--bg-lavender-lightest));
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Contact section */
+.contact-section {
+    background: linear-gradient(to bottom, var(--accent-peach), var(--bg-pink-lightest));
+}
+
+.contact-item {
+    background-color: var(--bg-lavender-lightest);
+    border-top: 4px solid;
+    border-image: linear-gradient(135deg, var(--pastel-pink), var(--pastel-blue-light)) 1;
+}
+
+/* Footer */
+footer {
+    background: linear-gradient(to right, var(--pastel-blue-dark), var(--pastel-purple-dark));
+}
+
+/* Cards and content boxes */
+.impact-stat, .work-item, .about-text {
+    background-color: var(--bg-lavender-lightest);
+    box-shadow: var(--shadow-sm);
+    border-radius: var(--radius-md);
+    transition: all 0.3s ease;
+}
+
+.impact-stat:hover, .work-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+    background-color: var(--bg-pink-lightest);
+}
+
+/* Buttons */
+.cta-button, .button {
+    background: linear-gradient(90deg, var(--pastel-blue), var(--pastel-blue-light));
+    transition: all 0.3s ease;
+}
+
+.cta-button.purple-btn, .button.purple-btn {
+    background: linear-gradient(90deg, var(--pastel-pink-dark), var(--pastel-pink));
+}
+
+.cta-button:hover, .button:hover {
+    background: linear-gradient(90deg, var(--pastel-blue-dark), var(--pastel-blue));
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.cta-button.purple-btn:hover, .button.purple-btn:hover {
+    background: linear-gradient(90deg, var(--pastel-pink), var(--pastel-pink-dark));
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Modal backgrounds */
+.modal-content {
+    background-color: var(--bg-lavender-lightest);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Navigation */
+.navbar {
+    background: linear-gradient(to right, var(--pastel-blue), var(--pastel-purple));
+}
+
+/* SVG wave */
+.svg-wave path {
+    fill: var(--bg-pink-lightest);
+    fill-opacity: 1;
+}
+
+/* Gallery items */
+.gallery-item {
+    background-color: transparent;
+}
+
+/* Donation loading overlay */
+.donation-message {
+    background-color: var(--bg-lavender-lightest);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Media queries for responsive design */
+@media (max-width: 768px) {
+    .section:nth-child(odd), .section:nth-child(even) {
+        background-color: var(--bg-pink-lightest);
+    }
+    
+    .section + .section {
+        background-color: var(--bg-blue-lightest);
+    }
+    
+    .section + .section + .section {
+        background-color: var(--bg-lavender-lightest);
+    }
+    
+    .section + .section + .section + .section {
+        background-color: var(--accent-peach);
+    }
+}

@@ -1,0 +1,84 @@
+/* Performance Optimization CSS */
+
+/* Reduce repaints and reflows */
+.will-change {
+    will-change: transform, opacity;
+}
+
+/* Hardware acceleration for smoother animations */
+.gpu-accelerate {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Minimize layout shifts */
+img, video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Lazy load images */
+img.lazy {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+img.lazy.loaded {
+    opacity: 1;
+}
+
+/* Reduce unnecessary animations */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* Critical rendering path optimization */
+.critical-content {
+    content-visibility: auto;
+    contain-intrinsic-size: 300px;
+}
+
+/* Font rendering */
+body {
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Prevent layout thrashing */
+.no-layout-shift {
+    position: relative;
+    overflow: hidden;
+}
+
+.no-layout-shift::before {
+    content: '';
+    display: block;
+    height: 0;
+    padding-top: 56.25%; /* 16:9 aspect ratio */
+}
+
+.no-layout-shift > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Reduce DOM complexity */
+.minimal-dom {
+    contain: layout;
+}
+
+/* Optimize scrolling */
+.smooth-scroll {
+    scroll-behavior: smooth;
+    overscroll-behavior-y: contain;
+}
