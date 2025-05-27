@@ -290,7 +290,7 @@
             </div>
         </section>
 
-       <section id="donate" class="section donate-section color-aligned">
+<section id="donate" class="section donate-section color-aligned">
     <div class="donate-container">
         <div class="donate-header">
             <h2>Support Our Mission</h2>
@@ -318,14 +318,32 @@
                 </li>
                 <li class="bank-details-item">
                     <span class="detail-label">UPI ID</span>
-                    <span class="detail-value">
-                        <a href="upi://pay?pa=9347020912@ybl&pn=Noor%20Charitable%20Trust&mc=1234&tid=1234567890&am=1&cu=INR&url=https://noorcharitabletrust.org" onclick="if (!/Android|iPhone/i.test(navigator.userAgent)) { event.preventDefault(); }">9347020912@ybl</a>
-                    </span>
+                    <span class="detail-value">9347020912@ybl</span>
                 </li>
             </ul>
         </div>
+
+        <div class="amount-input">
+            <label for="amount">Enter Amount:</label>
+            <input type="number" id="amount" placeholder="Enter amount" min="1" required>
+            <button id="payButton">Pay via UPI</button>
+        </div>
     </div>
 </section>
+
+<script>
+    document.getElementById('payButton').addEventListener('click', function() {
+        var amount = document.getElementById('amount').value;
+        if (amount) {
+            var upiId = '9347020912@ybl';
+            var payeeName = 'Noor Charitable Trust';
+            var upiLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${amount}&cu=INR`;
+            window.location.href = upiLink; // Redirect to UPI app
+        } else {
+            alert('Please enter a valid amount.');
+        }
+    });
+</script>
 
         <section id="about" class="section section-white">
             <div class="container">
