@@ -289,7 +289,6 @@
                 </div>
             </div>
         </section>
-
 <section id="donate" class="section donate-section color-aligned">
     <div class="donate-container">
         <div class="donate-header">
@@ -317,8 +316,8 @@
                     <span class="detail-value">IBKL0000207</span>
                 </li>
                 <li class="bank-details-item">
-                    <span class="detail-label">UPI ID</span>
-                    <span class="detail-value">9347020912@ybl</span>
+                    <span class="detail-label">Mobile Number</span>
+                    <span class="detail-value">9347020912</span> <!-- Use mobile number -->
                 </li>
             </ul>
         </div>
@@ -334,16 +333,17 @@
 <script>
     document.getElementById('payButton').addEventListener('click', function() {
         var amount = document.getElementById('amount').value;
-        if (amount) {
-            var upiId = '9347020912@ybl';
+        if (amount && amount > 0) {
+            var mobileNumber = '9347020912'; // Use mobile number for payment
             var payeeName = 'Noor Charitable Trust';
-            var upiLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${amount}&cu=INR`;
+            var upiLink = `upi://pay?pa=${mobileNumber}@ybl&pn=${encodeURIComponent(payeeName)}&am=${amount}&cu=INR`;
             window.location.href = upiLink; // Redirect to UPI app
         } else {
             alert('Please enter a valid amount.');
         }
     });
 </script>
+
 
         <section id="about" class="section section-white">
             <div class="container">
