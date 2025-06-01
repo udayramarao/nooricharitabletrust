@@ -24,6 +24,10 @@
     
     <!-- Razorpay SDK -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        // Add a cache-busting query parameter
+        document.write('<script src="js/razorpay-config.js?v=' + Date.now() + '"><\/script>');
+    </script>
 </head>
 <body>
     <header class="navbar">
