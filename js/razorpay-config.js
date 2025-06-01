@@ -132,7 +132,7 @@ async function handleDonation(e) {
     
         // Create order on server
         const response = await makeRequest(razorpayConfig.createOrderUrl, 'POST', {
-            amount: amount * 100, // Convert to paise
+            amount: amount, // Server will handle conversion to paise
             currency: 'INR',
             receipt: 'donation_' + Date.now(),
             notes: {
