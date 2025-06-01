@@ -20,7 +20,10 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&family=Source+Sans+Pro:wght@400;600;700&family=Poppins:wght@500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <link rel="stylesheet" href="css/donation-form.css">
+    
+    <!-- Razorpay SDK -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 </head>
 <body>
     <header class="navbar">
@@ -318,27 +321,60 @@
            </ul>
         </div>
 
-        <div class="amount-input">
-            <label for="amount">Enter Amount:</label>
-            <input type="number" id="amount" placeholder="Enter amount" min="1" required>
-            <button id="payButton">Pay via UPI</button>
+        <!-- Donation Form -->
+        <div class="donation-form-container">
+            <form id="donationForm" class="donation-form">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+                </div>
+                <div class="form-group">
+                    <label for="amount">Donation Amount (₹)</label>
+                    <input type="number" id="amount" name="amount" placeholder="Enter amount" min="100" required>
+                </div>
+                <div class="form-group">
+                    <label for="purpose">Purpose of Donation</label>
+                    <select id="purpose" name="purpose" required>
+                        <option value="" disabled selected>Select purpose</option>
+                        <option value="healthcare">Healthcare</option>
+                        <option value="education">Education</option>
+                        <option value="food">Food Distribution</option>
+                        <option value="general">General Fund</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit" id="donateButton" class="donate-button">Donate Now</button>
+                </div>
+            </form>
         </div>
     </div>
 </section>
 
-<script>
-    document.getElementById('payButton').addEventListener('click', function() {
-        var amount = document.getElementById('amount').value;
-        if (amount && amount > 0) {
-            var mobileNumber = '9347020912'; // Use mobile number for payment
-            var payeeName = 'Noor Charitable Trust';
-            var upiLink = `upi://pay?pa=${mobileNumber}@ybl&pn=${encodeURIComponent(payeeName)}&am=${amount}&cu=INR`;
-            window.location.href = upiLink; // Redirect to UPI app
-        } else {
-            alert('Please enter a valid amount.');
-        }
-    });
-</script>
+<!-- Success Modal -->
+<div id="successModal" class="modal">
+    <div class="modal-content">
+        <span class="close" aria-label="Close modal">&times;</span>
+        <div class="success-content">
+            <i class="fas fa-check-circle success-icon"></i>
+            <h2>Thank You for Your Donation!</h2>
+            <p>Your contribution will help us make a difference in the lives of those in need.</p>
+            <p>Payment ID: <span id="paymentId"></span></p>
+        </div>
+    </div>
+</div>
+
+<!-- Loading Spinner -->
+<div class="donation-loading" id="donationLoading">
+    <div class="spinner"></div>
+</div>
 
 
         <section id="about" class="section section-white">
@@ -453,5 +489,7 @@
         </div>
     </div>
 
+    <!-- Razorpay Integration Script -->
+    <script src="js/razorpay-config.js"></script>
 </body>
 </html>
