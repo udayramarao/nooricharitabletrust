@@ -359,6 +359,27 @@
             <h2>Thank You for Your Donation!</h2>
             <p>Your contribution will help us make a difference in the lives of those in need.</p>
             <p>Payment ID: <span id="paymentId"></span></p>
+            <div class="modal-actions">
+                <button class="btn" onclick="window.location.href='index.html#donate'">Donate Again</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('successModal').style.display='none'">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Failure Modal -->
+<div id="failureModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="document.getElementById('failureModal').style.display='none'">&times;</span>
+        <div class="error-content">
+            <i class="fas fa-times-circle error-icon"></i>
+            <h2>Payment Failed</h2>
+            <p>We're sorry, but there was an issue processing your donation. Please try again or contact support if the problem persists.</p>
+            <p>Error: <span id="errorMessage"></span></p>
+            <div class="modal-actions">
+                <button class="btn" onclick="document.getElementById('failureModal').style.display='none'; document.getElementById('donationForm').scrollIntoView({behavior: 'smooth'})">Try Again</button>
+                <button class="btn btn-secondary" onclick="window.location.href='contact.html'">Contact Support</button>
+            </div>
         </div>
     </div>
 </div>

@@ -65,36 +65,76 @@ async function makeRequest(url, method = 'GET', data = null) {
 // Function to show success modal
 function showSuccessModal(paymentId) {
     const modal = document.getElementById('successModal');
-    const transactionId = document.getElementById('transactionId');
-    const closeModal = document.querySelector('.close-modal');
-    const closeButton = document.getElementById('closeModal');
-    const printButton = document.getElementById('printReceipt');
+    const paymentIdElement = document.getElementById('paymentId');
+    
+    try {
+        // Set payment ID if element exists
+        if (paymentIdElement) {
+            paymentIdElement.textContent = paymentId || 'N/A';
+        }
+        
+        // Show modal
+        if (modal) {
+            modal.style.display = 'block';
+            document.body.classList.add('modal-open');
+        } else {
+            // Fallback to alert if modal doesn't exist
+            alert('Thank you for your donation! Payment ID: ' + (paymentId || 'N/A'));
+        }
+    } catch (error) {
+        console.error('Error showing success modal:', error);
+        // Fallback to alert if modal fails
+        alert('Thank you for your donation! Payment ID: ' + (paymentId || 'N/A'));
+    }
+}
 
-    // Set transaction ID
-    transactionId.textContent = paymentId || 'N/A';
+// Function to show failure modal
+function showFailureModal(errorMessage = 'An unknown error occurred') {
+    const modal = document.getElementById('failureModal');
+    const errorMessageElement = document.getElementById('errorMessage');
     
-    // Show modal
-    modal.style.display = 'flex';
+    try {
+        // Set error message if element exists
+        if (errorMessageElement) {
+            errorMessageElement.textContent = errorMessage;
+        }
+        
+        // Show modal
+        if (modal) {
+            modal.style.display = 'block';
+            document.body.classList.add('modal-open');
+        } else {
+            // Fallback to alert if modal doesn't exist
+            alert('Payment failed: ' + errorMessage);
+        }
+    } catch (error) {
+        console.error('Error showing failure modal:', error);
+        // Fallback to alert if modal fails
+        alert('Payment failed: ' + errorMessage);
+    }
+}
+
+// Close modals when clicking the close button or outside the modal
+document.addEventListener('DOMContentLoaded', function() {
+    // Close modals when clicking the close button
+    document.querySelectorAll('.close').forEach(closeBtn => {
+        closeBtn.onclick = function() {
+            const modal = this.closest('.modal');
+            if (modal) {
+                modal.style.display = 'none';
+                document.body.classList.remove('modal-open');
+            }
+        };
+    });
     
-    // Close modal when clicking the close button or outside the modal
-    const closeModalHandler = () => modal.style.display = 'none';
-    
-    closeModal.onclick = closeModalHandler;
-    closeButton.onclick = closeModalHandler;
-    
-    // Close when clicking outside the modal content
-    window.onclick = (event) => {
-        if (event.target === modal) {
-            closeModalHandler();
+    // Close modals when clicking outside the content
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = 'none';
+            document.body.classList.remove('modal-open');
         }
     };
-    
-    // Handle print receipt
-    printButton.onclick = () => {
-        // You can implement print functionality here
-        alert('Print receipt functionality will be implemented here');
-    };
-}
+});
 
 // Function to handle form submission
 async function handleDonation(e) {
@@ -233,11 +273,26 @@ async function handleDonation(e) {
                     
                 } catch (error) {
                     console.error('Payment verification failed:', error);
-                    alert('Payment verification failed. Please contact support with your payment ID.');
+                    showFailureModal(error.message || 'Payment verification failed. Please try again or contact support.');
                 } finally {
                     // Re-enable button
                     donateButton.disabled = false;
                     donateButton.innerHTML = originalButtonText;
+                }
+            },
+            modal: {
+                escape: true,
+                backdropclose: true,
+                handleback: true,
+                confirm_close: true,
+                ondismiss: function() {
+                    // This function is called when the payment popup is closed without completing payment
+                    showFailureModal('Payment was cancelled. Please try again if you wish to complete your donation.');
+                    // Re-enable button
+                    if (donateButton) {
+                        donateButton.disabled = false;
+                        donateButton.innerHTML = originalButtonText;
+                    }
                 }
             },
             prefill: {
