@@ -37,16 +37,27 @@ app.use(hpp()); // Prevent parameter pollution
 // Enable CORS with specific options in production
 const corsOptions = {
     origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps or curl requests)
-        if (!origin && process.env.NODE_ENV !== 'production') return callback(null, true);
+        // In development or if CORS_ALLOW_ALL is set, allow all origins
+        if (process.env.NODE_ENV !== 'production' || process.env.CORS_ALLOW_ALL === 'true') {
+            return callback(null, true);
+        }
         
-        const allowedOrigins = process.env.NODE_ENV === 'production'
-            ? ['https://yourdomain.com', 'https://www.yourdomain.com']
-            : ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5500', 'http://127.0.0.1:5500'];
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        
+        const allowedOrigins = [
+            'https://www.nooricharitabletrust.org',
+            'https://nooricharitabletrust.org',
+            'http://www.nooricharitabletrust.org',
+            'http://nooricharitabletrust.org',
+            // Add GitHub Pages domain if you're using it
+            'https://udayramarao.github.io'
+        ];
             
-        if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+        if (allowedOrigins.some(allowedOrigin => origin.startsWith(allowedOrigin))) {
             callback(null, true);
         } else {
+            console.warn(`CORS blocked request from origin: ${origin}`);
             callback(new Error('Not allowed by CORS'));
         }
     },
