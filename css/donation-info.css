@@ -1,0 +1,42 @@
+/* Donation Info Styles */
+.donation-info-container {
+    margin: 2rem auto;
+    max-width: 900px;
+}
+
+.donation-info-card {
+    background: linear-gradient(135deg, #f8fbff 0%, #f0f7ff 100%);
+    border-radius: 15px;
+    padding: 2.5rem;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e1e8ed;
+    margin-bottom: 2rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.donation-info-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(74, 144, 226, 0.1);
+}
+
+.donation-info-icon {
+    font-size: 3rem;
+    color: #4a90e2;
+    margin-bottom: 1.5rem;
+}
+
+.donation-info-title {
+    font-size: 1.8rem;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.donation-info-text {
+    color: #5a6a7e;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    max-width: 700px;
+    margin: 0 auto;
+}

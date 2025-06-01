@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="css/color-harmony.css">
     <link rel="stylesheet" href="css/gallery-fix.css">
     <link rel="stylesheet" href="css/soft-pastel-theme.css">
-    <link rel="stylesheet" href="css/bank-details.css">
+    <link rel="stylesheet" href="css/donation-info.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&family=Source+Sans+Pro:wght@400;600;700&family=Poppins:wght@500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -299,26 +299,14 @@
             <p>Your contribution helps us provide healthcare, education, and hope to those who need it most.</p>
         </div>
         
-        <div class="bank-details-container">
-            <h3 class="bank-details-title">Bank Account Details</h3>
-            <ul class="bank-details-list">
-                <li class="bank-details-item">
-                    <span class="detail-label">Branch</span>
-                    <span class="detail-value">Kadapa</span>
-                </li>
-                <li class="bank-details-item">
-                    <span class="detail-label">Account Holder Name</span>
-                    <span class="detail-value">NOOR CHARITABLE TRUST</span>
-                </li>
-                <li class="bank-details-item">
-                    <span class="detail-label">Account Number</span>
-                    <span class="detail-value">0207102000010371</span>
-                </li>
-                <li class="bank-details-item">
-                    <span class="detail-label">IFSC Code</span>
-                    <span class="detail-value">IBKL0000207</span>
-                </li>            
-           </ul>
+        <div class="donation-info-container">
+            <div class="donation-info-card">
+                <div class="donation-info-icon">
+                    <i class="fas fa-hand-holding-heart"></i>
+                </div>
+                <h3 class="donation-info-title">Your Support Makes a Difference</h3>
+                <p class="donation-info-text">Every contribution helps us provide essential services to those in need. Donate securely through our payment partner Razorpay.</p>
+            </div>
         </div>
 
         <!-- Donation Form -->
@@ -338,7 +326,7 @@
                 </div>
                 <div class="form-group">
                     <label for="amount">Donation Amount (₹)</label>
-                    <input type="number" id="amount" name="amount" placeholder="Enter amount" min="100" required>
+                    <input type="number" id="amount" name="amount" placeholder="Enter amount" min="1" required>
                 </div>
                 <div class="form-group">
                     <label for="purpose">Purpose of Donation</label>

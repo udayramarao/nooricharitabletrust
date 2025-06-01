@@ -1,7 +1,7 @@
 // Razorpay Configuration
 const razorpayConfig = {
     // Server endpoints
-    apiBaseUrl: 'https://noori-charitable-trust-backend.onrender.com', // Production backend URL
+    apiBaseUrl: 'http://localhost:3002', // Local development server URL
     createOrderUrl: '/api/create-order',
     verifyPaymentUrl: '/api/verify-payment',
     
