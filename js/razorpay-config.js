@@ -8,7 +8,7 @@ const razorpayConfig = {
     // Client-side only configurations
     company_name: 'Noor Charitable Trust',
     theme: {
-        color: '#6a1b9a'  // Purple theme to match your site
+        color: '#8e44ad'  // Purple theme to match your site
     }
 };
 
@@ -18,24 +18,47 @@ async function makeRequest(url, method = 'GET', data = null) {
         method,
         headers: {
             'Content-Type': 'application/json',
+            'Accept': 'application/json'
         },
-        credentials: 'same-origin'
+        credentials: 'same-origin',
+        mode: 'cors'
     };
 
     if (data) {
         options.body = JSON.stringify(data);
+        console.log('Request data:', data);
     }
 
+    const fullUrl = `${razorpayConfig.apiBaseUrl}${url}`;
+    console.log(`Making ${method} request to:`, fullUrl);
+
     try {
-        const response = await fetch(`${razorpayConfig.apiBaseUrl}${url}`, options);
+        const response = await fetch(fullUrl, options);
+        const responseData = await response.json().catch(() => ({}));
+        
+        console.log('Response status:', response.status);
+        console.log('Response data:', responseData);
+        
         if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.error || 'Something went wrong');
+            const errorMessage = responseData.message || responseData.error || 'Something went wrong';
+            console.error('API Error:', {
+                status: response.status,
+                statusText: response.statusText,
+                error: errorMessage,
+                url: fullUrl
+            });
+            throw new Error(errorMessage);
         }
-        return await response.json();
+        
+        return responseData;
     } catch (error) {
-        console.error('API Error:', error);
-        throw error;
+        console.error('Network/API Error:', {
+            url: fullUrl,
+            method,
+            error: error.message,
+            stack: error.stack
+        });
+        throw new Error(`Failed to process request: ${error.message}`);
     }
 }
 
@@ -86,34 +109,29 @@ async function handleDonation(e) {
     const purposeText = document.getElementById('purpose').options[document.getElementById('purpose').selectedIndex].text;
     const donateButton = document.getElementById('donateButton');
     
-    // Validate form
-    if (!name || !email || !phone || isNaN(amount) || amount < 1) {
-        alert('Please fill in all fields and enter a valid amount (minimum ₹1)');
-        return;
-    }
-    
-    // Validate email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        alert('Please enter a valid email address');
-        return;
-    }
-    
-    // Validate phone number (basic validation for Indian numbers)
-    const phoneRegex = /^[6-9]\d{9}$/;
-    if (!phoneRegex.test(phone)) {
-        alert('Please enter a valid 10-digit Indian phone number');
-        return;
-    }
-    
     // Show loading state
     const originalButtonText = donateButton.innerHTML;
     donateButton.disabled = true;
     donateButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
     
     try {
-        // Create order on the server
-        const orderData = await makeRequest(razorpayConfig.createOrderUrl, 'POST', {
+        // Validate form
+        if (!name || !email || !phone || isNaN(amount) || amount < 1) {
+            throw new Error('Please fill in all fields and enter a valid amount (minimum ₹1)');
+        }
+        
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            throw new Error('Please enter a valid email address');
+        }
+        
+        const phoneRegex = /^[6-9]\d{9}$/;
+        if (!phoneRegex.test(phone)) {
+            throw new Error('Please enter a valid 10-digit Indian mobile number');
+        }
+    
+        // Create order on server
+        const response = await makeRequest(razorpayConfig.createOrderUrl, 'POST', {
             amount: amount * 100, // Convert to paise
             currency: 'INR',
             receipt: 'donation_' + Date.now(),
@@ -121,65 +139,112 @@ async function handleDonation(e) {
                 name,
                 email,
                 phone,
-                purpose: purposeText
+                purpose,
+                purposeText
             }
         });
+
+        // Extract order data and key from server response
+        const orderData = response.data.order;
+        const razorpayKey = response.data.key;
         
-        // Initialize Razorpay with order details
+        console.log('Order created:', orderData);
+        console.log('Using Razorpay Key:', razorpayKey);
+
+        // Open Razorpay checkout
         const options = {
-            key: 'rzp_live_w0S4HMSEhghpNu', // Your Razorpay Key ID
+            key: razorpayKey,
             amount: orderData.amount,
-            currency: orderData.currency,
+            currency: orderData.currency || 'INR',
             name: razorpayConfig.company_name,
             description: `Donation for ${purposeText}`,
             order_id: orderData.id,
-            handler: async function(response) {
-                try {
-                    // Verify payment on the server
-                    const verification = await makeRequest(razorpayConfig.verifyPaymentUrl, 'POST', {
-                        razorpay_order_id: response.razorpay_order_id,
-                        razorpay_payment_id: response.razorpay_payment_id,
-                        razorpay_signature: response.razorpay_signature
-                    });
-                    
-                    if (verification.status === 'success') {
-                        // Show success message
-                        showSuccessModal(response.razorpay_payment_id);
-                        // Reset form
-                        document.getElementById('donationForm').reset();
-                    } else {
-                        alert('Payment verification failed. Please contact support with payment ID: ' + response.razorpay_payment_id);
-                    }
-                } catch (error) {
-                    console.error('Verification error:', error);
-                    alert('Payment successful but verification failed. Please contact support with payment ID: ' + response.razorpay_payment_id);
-                }
-            },
             prefill: {
                 name: name,
                 email: email,
                 contact: phone
             },
-            theme: {
-                color: razorpayConfig.theme.color
+            theme: razorpayConfig.theme,
+            // Enable UPI payment method
+            config: {
+                display: {
+                    blocks: {
+                        utib: {
+                            name: 'Pay using UPI',
+                            instruments: [
+                                {
+                                    method: 'upi'
+                                }
+                            ]
+                        }
+                    },
+                    sequence: ['block.utib'],
+                    preferences: {
+                        show_default_blocks: false
+                    }
+                }
             },
+            handler: async function(response) {
+                try {
+                    // Verify payment on server
+                    console.log('Payment response:', response);
+                    const verification = await makeRequest(razorpayConfig.verifyPaymentUrl, 'POST', {
+                        order_id: response.razorpay_order_id,
+                        payment_id: response.razorpay_payment_id,
+                        signature: response.razorpay_signature,
+                        notes: {
+                            name: name,
+                            email: email,
+                            phone: phone,
+                            purpose: purpose,
+                            purposeText: purposeText
+                        }
+                    });
+                    
+                    // Show success message
+                    showSuccessModal(response.razorpay_payment_id);
+                    
+                    // Reset form
+                    document.getElementById('donationForm').reset();
+                    
+                } catch (error) {
+                    console.error('Payment verification failed:', error);
+                    alert('Payment verification failed. Please contact support with your payment ID.');
+                } finally {
+                    // Re-enable button
+                    donateButton.disabled = false;
+                    donateButton.innerHTML = originalButtonText;
+                }
+            },
+            prefill: {
+                name,
+                email,
+                contact: phone
+            },
+            theme: razorpayConfig.theme,
             modal: {
                 ondismiss: function() {
-                    // Handle modal dismissal
-                    console.log('Payment modal dismissed');
+                    // Re-enable button if user closes the Razorpay modal
+                    donateButton.disabled = false;
+                    donateButton.innerHTML = originalButtonText;
                 }
             }
         };
         
-        // Initialize Razorpay payment
         const rzp = new Razorpay(options);
         rzp.open();
         
+        // Handle payment failure
+        rzp.on('payment.failed', function(response) {
+            console.error('Payment failed:', response.error);
+            alert('Payment failed: ' + (response.error.description || 'Unknown error'));
+            donateButton.disabled = false;
+            donateButton.innerHTML = originalButtonText;
+        });
+        
     } catch (error) {
         console.error('Error:', error);
-        alert('An error occurred: ' + (error.message || 'Please try again later.'));
-    } finally {
-        // Reset button state
+        alert(error.message || 'An error occurred. Please try again.');
         donateButton.disabled = false;
         donateButton.innerHTML = originalButtonText;
     }
@@ -202,6 +267,20 @@ function initDonationForm() {
     
     // Add submit event listener to the form
     donationForm.addEventListener('submit', handleDonation);
+}
+
+// Initialize donation form event listeners
+function initDonationForm() {
+    const donationForm = document.getElementById('donationForm');
+    if (donationForm) {
+        donationForm.addEventListener('submit', handleDonation);
+    }
+    
+    // Set default amount if not set
+    const amountInput = document.getElementById('amount');
+    if (amountInput && !amountInput.value) {
+        amountInput.value = '500';
+    }
 }
 
 // Initialize when DOM is loaded

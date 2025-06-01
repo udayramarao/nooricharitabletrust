@@ -19,7 +19,14 @@ const emailService = require('./utils/emailService');
 
 // Initialize Express app
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
+
+// Debug log environment variables
+console.log('Environment Variables:');
+console.log('- NODE_ENV:', process.env.NODE_ENV);
+console.log('- PORT:', PORT);
+console.log('- RAZORPAY_KEY_ID:', process.env.RAZORPAY_KEY_ID ? '***' : 'Not set');
+console.log('- RAZORPAY_KEY_SECRET:', process.env.RAZORPAY_KEY_SECRET ? '***' : 'Not set');
 
 // Security middleware
 app.use(helmet()); // Set security HTTP headers
@@ -29,18 +36,99 @@ app.use(hpp()); // Prevent parameter pollution
 
 // Enable CORS with specific options in production
 const corsOptions = {
-    origin: process.env.NODE_ENV === 'production' 
-        ? ['https://yourdomain.com', 'https://www.yourdomain.com']
-        : '*',
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin && process.env.NODE_ENV !== 'production') return callback(null, true);
+        
+        const allowedOrigins = process.env.NODE_ENV === 'production'
+            ? ['https://yourdomain.com', 'https://www.yourdomain.com']
+            : ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5500', 'http://127.0.0.1:5500'];
+            
+        if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+    credentials: true,
+    optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
+
+// Handle preflight requests
+app.options('*', cors(corsOptions));
+
+// Set Content Security Policy headers
+app.use((req, res, next) => {
+    const csp = [
+        "default-src 'self'",
+        "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://api.razorpay.com https://browser.sentry-cdn.com",
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com",
+        "font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com",
+        "img-src 'self' data: https: blob:",
+        "connect-src 'self' https://api.razorpay.com http://localhost:3000 http://localhost:3001 https://checkout.razorpay.com https://lumberjack.razorpay.com",
+        "frame-src 'self' https://checkout.razorpay.com https://api.razorpay.com",
+        "media-src 'self'"
+    ].join('; ');
+
+    res.setHeader('Content-Security-Policy', csp);
+    
+    // Set correct MIME types for CSS files
+    if (req.url.endsWith('.css')) {
+        res.setHeader('Content-Type', 'text/css');
+    }
+    
+    next();
+});
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+
+// Serve static files from the root directory with proper MIME types
+app.use(express.static(path.join(__dirname, '..'), {
+    setHeaders: (res, filePath) => {
+        const ext = path.extname(filePath).toLowerCase();
+        const mimeTypes = {
+            '.css': 'text/css',
+            '.js': 'application/javascript',
+            '.json': 'application/json',
+            '.png': 'image/png',
+            '.jpg': 'image/jpeg',
+            '.jpeg': 'image/jpeg',
+            '.gif': 'image/gif',
+            '.svg': 'image/svg+xml',
+            '.wav': 'audio/wav',
+            '.mp4': 'video/mp4',
+            '.woff': 'application/font-woff',
+            '.woff2': 'application/font-woff2',
+            '.ttf': 'application/font-ttf',
+            '.eot': 'application/vnd.ms-fontobject',
+            '.otf': 'application/font-otf',
+            '.wasm': 'application/wasm'
+        };
+
+        if (mimeTypes[ext]) {
+            res.setHeader('Content-Type', mimeTypes[ext]);
+        }
+    }
+}));
+
+// Serve CSS files specifically from the css directory
+app.use('/css', express.static(path.join(__dirname, '..', 'css'), {
+    setHeaders: (res, path) => {
+        res.setHeader('Content-Type', 'text/css');
+    }
+}));
+
+// Serve JS files specifically from the js directory
+app.use('/js', express.static(path.join(__dirname, '..', 'js'), {
+    setHeaders: (res, path) => {
+        res.setHeader('Content-Type', 'application/javascript');
+    }
+}));
 
 // Initialize Razorpay with error handling
 let razorpay;
@@ -132,7 +220,8 @@ app.post('/api/create-order', async (req, res) => {
         res.status(201).json({
             status: 'success',
             data: {
-                order
+                order,
+                key: process.env.RAZORPAY_KEY_ID
             }
         });
     } catch (error) {

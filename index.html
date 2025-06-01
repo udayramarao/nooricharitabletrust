@@ -25,6 +25,8 @@
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <!-- Load Razorpay configuration -->
     <script src="js/razorpay-config.js" defer></script>
+    <!-- Load Donation Form Script -->
+    <script src="js/donation-form.js" defer></script>
     <style>
         /* Donation Form Styles */
         .donation-form {
@@ -396,112 +398,93 @@
                 </div>
             </div>
         </section>
-<section id="donate" class="section donate-section color-aligned">
-    <div class="donate-container">
-        <div class="donate-header">
-            <h2>Support Our Mission</h2>
-            <p>Your contribution helps us provide healthcare, education, and hope to those who need it most.</p>
+
+        <!-- Donation Section -->
+<section id="donate" class="section donate-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Make a Donation</h2>
+            <p class="section-subtitle">Your generous contribution will help us make a difference in people's lives</p>
         </div>
-        
-        <div class="donation-form-container">
-            <form id="donationForm" class="donation-form">
-                <div class="form-group">
-                    <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" placeholder="Your full name" required>
+
+        <div class="donation-container">
+            <div class="donation-options">
+                <div class="donation-option active" data-amount="500">
+                    <span>₹500</span>
+                    <small>Helps provide meals for 10 people</small>
                 </div>
-                
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="your.email@example.com" required>
+                <div class="donation-option" data-amount="1000">
+                    <span>₹1000</span>
+                    <small>Supports education for a child</small>
                 </div>
-                
-                <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" placeholder="10-digit mobile number" pattern="[0-9]{10}" required>
+                <div class="donation-option" data-amount="2000">
+                    <span>₹2000</span>
+                    <small>Medical aid for the needy</small>
                 </div>
-                
-                <div class="form-group">
-                    <label for="amount">Donation Amount (₹)</label>
-                    <input type="number" id="amount" name="amount" min="1" placeholder="Enter amount" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="purpose">Purpose of Donation</label>
-                    <select id="purpose" name="purpose" required>
-                        <option value="">Select a purpose</option>
-                        <option value="health">Health Camps</option>
-                        <option value="education">Education Support</option>
-                        <option value="women">Women Empowerment</option>
-                        <option value="general">General Donation</option>
-                    </select>
-                </div>
-                
-                <button type="submit" id="donateButton" class="donate-button">
-                    <i class="fas fa-heart"></i> Donate Now
-                </button>
-            </form>
-            
-            <div class="payment-methods">
-                <p>We accept all major credit/debit cards, UPI, and net banking</p>
-                <div class="payment-icons">
-                    <i class="fab fa-cc-visa"></i>
-                    <i class="fab fa-cc-mastercard"></i>
-                    <i class="fab fa-cc-amex"></i>
-                    <i class="fas fa-mobile-alt"></i>
-                    <i class="fas fa-university"></i>
+                <div class="donation-option custom-amount">
+                    <span>Other</span>
+                    <input type="number" id="customAmount" placeholder="Enter amount" min="1">
                 </div>
             </div>
-        </div>
-        
-        <div class="bank-details-container">
-            <h3 class="bank-details-title">Direct Bank Transfer</h3>
-            <ul class="bank-details-list">
-                <li class="bank-details-item">
-                    <span class="detail-label">Branch</span>
-                    <span class="detail-value">Kadapa</span>
-                </li>
-                <li class="bank-details-item">
-                    <span class="detail-label">Account Holder Name</span>
-                    <span class="detail-value">NOOR CHARITABLE TRUST</span>
-                </li>
-                <li class="bank-details-item">
-                    <span class="detail-label">Account Number</span>
-                    <span class="detail-value">0207102000010371</span>
-                </li>
-                <li class="bank-details-item">
-                    <span class="detail-label">IFSC Code</span>
-                    <span class="detail-value">IBKL0000207</span>
-                </li>
-            </ul>
+
+            <form id="donationForm" class="donation-form">
+                <!-- Hidden amount input will be managed by donation-form.js -->
+                <input type="hidden" id="amount" name="amount" value="500">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="phone">Phone Number (10 digits) *</label>
+                        <input type="tel" id="phone" name="phone" pattern="[6-9]\d{9}" title="Please enter a valid 10-digit Indian mobile number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="purpose">Donation Purpose *</label>
+                        <select id="purpose" name="purpose" required>
+                            <option value="general">General Donation</option>
+                            <option value="education">Education Support</option>
+                            <option value="healthcare">Healthcare</option>
+                            <option value="food">Food Distribution</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">Message (Optional)</label>
+                    <textarea id="message" name="message" rows="3" placeholder="Any special instructions or messages"></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="donate-btn" id="donateButton">
+                        <i class="fas fa-heart"></i> Donate Now
+                    </button>
+                </div>
+
+                <div class="secure-payment">
+                    <i class="fas fa-lock"></i>
+                    <span>Secure Payment</span>
+                    <div class="payment-methods">
+                        <i class="fab fa-cc-visa"></i>
+                        <i class="fab fa-cc-mastercard"></i>
+                        <i class="fab fa-cc-amex"></i>
+                        <i class="fab fa-cc-paypal"></i>
+                        <i class="fas fa-university"></i>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </section>
-
-<!-- Success Modal -->
-<div id="successModal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal">&times;</span>
-        <div class="success-icon">
-            <i class="fas fa-check-circle"></i>
-        </div>
-        <h3>Donation Successful!</h3>
-        <p>Thank you for your generous support. Your donation will make a difference.</p>
-        <p>Transaction ID: <span id="transactionId"></span></p>
-        <div class="receipt-actions">
-            <button id="printReceipt" class="btn">Print Receipt</button>
-            <button id="closeModal" class="btn btn-secondary">Close</button>
-        </div>
-    </div>
-</div>
-
-<script>
-// This script is now handled by razorpay-config.js
-</script>
-            alert('Please enter a valid amount.');
-        }
-    });
-</script>
-
 
         <section id="about" class="section section-white">
             <div class="container">
@@ -551,47 +534,7 @@
                 </div>
             </div>
         </div>
-        <section id="donate" class="section section-white">
-            <div class="container">
-                <div class="section-header">
-                    <h2 class="section-heading">Make a Donation</h2>
-                    <p>Your generous donation will help us make a difference in people's lives</p>
-                </div>
-                <div class="donation-form">
-                    <form id="donationForm">
-                        <div class="form-group">
-                            <label for="name">Full Name</label>
-                            <input type="text" id="name" name="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone" name="phone" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="amount">Donation Amount (₹)</label>
-                            <input type="number" id="amount" name="amount" min="1" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="purpose">Purpose of Donation</label>
-                            <select id="purpose" name="purpose">
-                                <option value="general">General Donation</option>
-                                <option value="education">Education</option>
-                                <option value="healthcare">Healthcare</option>
-                                <option value="orphan-care">Orphan Care</option>
-                                <option value="women-empowerment">Women Empowerment</option>
-                            </select>
-                        </div>
-                        <button type="button" id="donateButton" class="cta-button main-action-btn purple-btn">
-                            Donate Now
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </section>
+
     </main>
 
     <section id="contact" class="section section-white contact-section color-aligned">
