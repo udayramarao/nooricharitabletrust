@@ -165,22 +165,46 @@ async function handleDonation(e) {
                 contact: phone
             },
             theme: razorpayConfig.theme,
-            // Enable UPI payment method
+            // Show all payment methods with UPI at the top
             config: {
                 display: {
                     blocks: {
-                        utib: {
+                        upi: {
                             name: 'Pay using UPI',
                             instruments: [
                                 {
                                     method: 'upi'
                                 }
                             ]
+                        },
+                        banks: {
+                            name: 'Pay using Netbanking',
+                            instruments: [
+                                {
+                                    method: 'netbanking'
+                                }
+                            ]
+                        },
+                        cards: {
+                            name: 'Pay using Cards',
+                            instruments: [
+                                {
+                                    method: 'card'
+                                }
+                            ]
+                        },
+                        wallets: {
+                            name: 'Pay using Wallets',
+                            instruments: [
+                                {
+                                    method: 'wallet'
+                                }
+                            ]
                         }
                     },
-                    sequence: ['block.utib'],
+                    sequence: ['block.upi', 'block.banks', 'block.cards', 'block.wallets'],
                     preferences: {
-                        show_default_blocks: false
+                        show_default_blocks: true
                     }
                 }
             },
