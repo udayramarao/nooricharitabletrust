@@ -249,7 +249,13 @@ async function handleDonation(e) {
                 }
             },
             handler: async function(response) {
+                const loadingElement = document.getElementById('donationLoading');
                 try {
+                    // Show loading spinner
+                    if (loadingElement) {
+                        loadingElement.classList.add('active');
+                    }
+                    
                     // Verify payment on server
                     console.log('Payment response:', response);
                     const verification = await makeRequest(razorpayConfig.verifyPaymentUrl, 'POST', {
@@ -275,9 +281,15 @@ async function handleDonation(e) {
                     console.error('Payment verification failed:', error);
                     showFailureModal(error.message || 'Payment verification failed. Please try again or contact support.');
                 } finally {
+                    // Hide loading spinner
+                    if (loadingElement) {
+                        loadingElement.classList.remove('active');
+                    }
                     // Re-enable button
-                    donateButton.disabled = false;
-                    donateButton.innerHTML = originalButtonText;
+                    if (donateButton) {
+                        donateButton.disabled = false;
+                        donateButton.innerHTML = originalButtonText;
+                    }
                 }
             },
             modal: {
