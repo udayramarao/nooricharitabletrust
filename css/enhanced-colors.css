@@ -1,0 +1,570 @@
+:root {
+    /* Enhanced color palette with more vibrant yet professional colors */
+    --primary-blue: #2980b9;         /* Main brand color - vibrant blue */
+    --primary-blue-light: #3498db;   /* Lighter blue for hover states */
+    --primary-blue-dark: #1a5276;    /* Darker blue for active states */
+    
+    --accent-teal: #16a085;         /* Complementary teal for accents */
+    --accent-teal-light: #1abc9c;    /* Lighter teal */
+    --accent-teal-dark: #0e6655;     /* Darker teal */
+    
+    --accent-green: #27ae60;        /* Green for call-to-actions */
+    --accent-green-light: #2ecc71;  /* Lighter green */
+    --accent-green-dark: #1e8449;   /* Darker green */
+    
+    /* Gradient backgrounds */
+    --gradient-hero: linear-gradient(135deg, #2980b9, #3498db);
+    --gradient-donate: linear-gradient(135deg, #16a085, #3498db);
+    --gradient-impact: linear-gradient(135deg, #2980b9, #1abc9c);
+    
+    /* Background colors */
+    --bg-light: #f9f9f9;            /* Light background */
+    --bg-white: #ffffff;            /* White background */
+    --bg-purple-light: #f4ecf7;     /* Very light purple background */
+    --bg-teal-light: #e8f8f5;       /* Very light teal background */
+    
+    /* Text colors */
+    --text-dark: #2c3e50;           /* Dark text for light backgrounds */
+    --text-medium: #34495e;         /* Medium dark text */
+    --text-light: #ecf0f1;          /* Light text for dark backgrounds */
+    --text-accent: #2980b9;         /* Accent text color */
+    
+    /* Button colors */
+    --btn-primary: #2980b9;         /* Primary button color */
+    --btn-secondary: #16a085;       /* Secondary button color */
+    --btn-donate: #27ae60;          /* Donate button color */
+    --btn-hover: #3498db;           /* Button hover color */
+    
+    /* Success/Error colors */
+    --success: #27ae60;             /* Success color */
+    --error: #e74c3c;               /* Error color */
+    --warning: #f39c12;             /* Warning color */
+    --info: #3498db;                /* Info color */
+}
+
+/* Apply enhanced colors to elements */
+
+/* Navbar styling */
+.navbar {
+    background: linear-gradient(to right, var(--primary-blue), var(--primary-blue-light));
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.nav-link {
+    color: var(--text-light) !important;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+/* Ensure mobile menu links are white */
+#nav-links .nav-link {
+    color: white !important;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.nav-link:hover {
+    color: rgba(255, 255, 255, 0.9) !important;
+    transform: translateY(-2px);
+}
+
+/* Hero section */
+.hero-section {
+    background: linear-gradient(135deg, var(--primary-blue-dark), var(--primary-blue-light));
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100"><path fill="%23ffffff" fill-opacity="1" d="M0,64L80,69.3C160,75,320,85,480,80C640,75,800,53,960,42.7C1120,32,1280,32,1360,32L1440,32L1440,100L1360,100C1280,100,1120,100,960,100C800,100,640,100,480,100C320,100,160,100,80,100L0,100Z"></path></svg>');
+    background-size: cover;
+    background-position: center;
+}
+
+.hero-content h1 {
+    color: var(--text-light);
+    font-weight: 700;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.hero-content p {
+    color: var(--text-light);
+    font-size: 1.2rem;
+}
+
+/* Impact stats section */
+#impact-stats {
+    background: var(--gradient-impact);
+    padding: 3rem 0;
+}
+
+.impact-stat {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border-bottom: 4px solid var(--primary-blue);
+}
+
+.impact-stat:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    border-bottom-color: var(--accent-teal);
+}
+
+.impact-stat h3 {
+    color: var(--primary-blue);
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.impact-stat p {
+    color: var(--text-medium);
+    font-weight: 500;
+}
+
+/* Our Impact & Work section */
+#our-impact {
+    background-color: var(--bg-light);
+}
+
+.work-item {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.work-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.work-content h3 {
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+.learn-more-btn {
+    background-color: var(--primary-blue) !important;
+    color: white !important;
+    font-weight: bold !important;
+    padding: 8px 16px !important;
+    border: none !important;
+    border-radius: 4px !important;
+    transition: all 0.3s ease !important;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+}
+
+.learn-more-btn:hover {
+    background-color: var(--primary-blue-dark) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Gallery section */
+.gallery-section {
+    background-color: var(--bg-purple-light);
+}
+
+.slideshow-container {
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+/* Donation section */
+.donate-section {
+    background: linear-gradient(135deg, var(--accent-teal-light), var(--primary-blue-light));
+    position: relative;
+}
+
+.donate-container {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 10px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    padding: 2.5rem;
+}
+
+.donate-header h2 {
+    color: var(--primary-blue);
+    font-weight: 700;
+}
+
+.donation-info-card {
+    background-color: var(--bg-teal-light);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    border-left: 5px solid var(--primary-blue);
+}
+
+.donation-info-icon i {
+    color: var(--primary-blue);
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.donation-form-container {
+    background-color: var(--bg-white);
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.donate-button {
+    background-color: var(--accent-green) !important;
+    color: white !important;
+    font-weight: bold !important;
+    padding: 12px 24px !important;
+    border: none !important;
+    border-radius: 4px !important;
+    transition: all 0.3s ease !important;
+    width: 100%;
+    font-size: 1.1rem;
+}
+
+.donate-button:hover {
+    background-color: var(--accent-green-dark) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* About section */
+#about {
+    background-color: var(--bg-white);
+}
+
+.about-content h3 {
+    color: var(--primary-blue);
+    font-weight: 600;
+    margin-top: 1.5rem;
+}
+
+.value-item {
+    background-color: var(--bg-teal-light);
+    padding: 1rem;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+    border-left: 3px solid var(--primary-blue);
+}
+
+.about-content .main-title {
+    color: white !important;
+    font-weight: 700;
+    margin: 0;
+    font-size: 1.5rem;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Footer */
+footer {
+    background: linear-gradient(to right, var(--primary-blue-dark), var(--primary-blue));
+    color: var(--text-light);
+    padding: 3rem 0 1.5rem;
+}
+
+footer h3 {
+    color: white;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+footer p, footer a {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+footer a:hover {
+    color: white;
+    text-decoration: none;
+}
+
+/* Success and failure messages */
+.payment-message {
+    border-radius: 10px;
+    padding: 2rem;
+    margin: 2rem 0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.success-message {
+    background-color: rgba(39, 174, 96, 0.1);
+    border: 1px solid rgba(39, 174, 96, 0.3);
+}
+
+.failure-message {
+    background-color: rgba(231, 76, 60, 0.05);
+    border: 1px solid rgba(231, 76, 60, 0.2);
+    border-left: 4px solid var(--error);
+}
+
+.success-icon {
+    color: var(--success);
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.failure-icon {
+    color: var(--error);
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+/* Payment modal buttons */
+.payment-message button,
+.modal-footer button,
+.dismiss-button {
+    background-color: var(--primary-blue) !important;
+    color: white !important;
+    font-weight: 600 !important;
+    padding: 10px 24px !important;
+    border: none !important;
+    border-radius: 4px !important;
+    transition: all 0.3s ease !important;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.payment-message button:hover,
+.modal-footer button:hover,
+.dismiss-button:hover {
+    background-color: var(--primary-blue-dark) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Payment failure specific styling */
+.payment-failed-container {
+    border: 1px solid rgba(231, 76, 60, 0.3);
+    border-radius: 10px;
+    padding: 2rem;
+    background-color: rgba(255, 235, 235, 0.5);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    max-width: 500px;
+    margin: 2rem auto;
+    text-align: center;
+}
+
+/* Razorpay form styling consistency */
+.donation-form input, .donation-form select, .donation-form textarea {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px 12px;
+    margin-bottom: 15px;
+    width: 100%;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.donation-form input:focus, .donation-form select:focus, .donation-form textarea:focus {
+    border-color: var(--primary-blue);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(41, 128, 185, 0.2);
+}
+
+.donation-form label {
+    font-weight: 500;
+    color: var(--text-dark);
+    margin-bottom: 5px;
+    display: block;
+}
+
+.payment-failed-container h2 {
+    color: #333;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.payment-failed-container p {
+    color: #555;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.payment-failed-icon {
+    background-color: #e74c3c;
+    color: white;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 2rem;
+}
+
+/* Animation classes */
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Our Impact & Work section - Desktop styles */
+.work-showcase {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns for desktop */
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.work-item {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.work-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+
+.work-item-img {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.5s ease;
+}
+
+.work-item:hover .work-item-img {
+    transform: scale(1.05);
+}
+
+.work-item-content {
+    padding: 20px;
+}
+
+.work-item-content h3 {
+    margin-top: 0;
+    color: var(--primary-blue);
+    font-size: 1.5rem;
+    margin-bottom: 12px;
+}
+
+.work-item-content p {
+    margin-bottom: 20px;
+    line-height: 1.6;
+    color: var(--text-medium);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .impact-stat h3 {
+        font-size: 2rem;
+    }
+    
+    .donate-container {
+        padding: 1.5rem;
+    }
+    
+    .donation-form-container {
+        padding: 1.5rem;
+    }
+    
+    /* Improve donation form buttons on mobile */
+    .donate-btn, .donate-amount-btn {
+        width: 100%;
+        margin-bottom: 10px;
+        padding: 12px !important;
+        font-size: 1.1rem !important;
+    }
+    
+    /* Improve section titles on mobile */
+    .section-title {
+        font-size: 1.8rem !important;
+        margin-bottom: 1.5rem !important;
+        color: var(--primary-blue) !important;
+        text-align: center;
+    }
+    
+    /* Improve Our Impact & Work section on mobile */
+    .work-showcase {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive grid for mobile */
+        gap: 20px;
+    }
+    
+    .work-item {
+        width: 100% !important;
+        margin-bottom: 20px !important;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
+    }
+    
+    .work-item-content {
+        padding: 15px;
+    }
+    
+    .work-item-content h3 {
+        font-size: 1.4rem;
+        margin-bottom: 10px;
+    }
+    
+    .work-item-content p {
+        margin-bottom: 15px;
+        line-height: 1.5;
+    }
+    
+    /* Ensure hamburger menu has proper styling */
+    .hamburger-icon span {
+        background-color: white !important;
+        height: 3px !important;
+        margin: 5px 0 !important;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+    }
+    
+    /* Mobile navigation menu styling */
+    .nav-links {
+        background: linear-gradient(to right, var(--primary-blue-dark), var(--primary-blue));
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        border-radius: 0 0 10px 10px;
+        padding: 10px 0 !important;
+    }
+    
+    /* Enhance mobile nav links */
+    .nav-links .nav-link {
+        padding: 12px 20px !important;
+        font-size: 1.1rem !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
+    }
+    
+    /* Ensure main title is visible on mobile */
+    .main-title {
+        font-size: 1.3rem;
+        max-width: 220px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: white !important;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4) !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.5px;
+    }
+}

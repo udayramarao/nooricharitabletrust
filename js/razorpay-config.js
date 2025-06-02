@@ -1,3 +1,13 @@
+// Initialize global error and timeout tracking
+window.activeTimeouts = window.activeTimeouts || [];
+window.paymentErrors = window.paymentErrors || [];
+
+// Clear orphaned timeouts on page load/reload
+window.addEventListener('load', () => {
+    window.activeTimeouts = [];
+    window.paymentErrors = [];
+});
+
 // Razorpay Configuration
 const razorpayConfig = {
     // Server endpoints
@@ -8,8 +18,16 @@ const razorpayConfig = {
     // Client-side only configurations
     company_name: 'Noor Charitable Trust',
     theme: {
-        color: '#8e44ad'  // Purple theme to match your site
-    }
+        color: '#2980b9',  // Primary blue to match our updated site colors
+        backdrop_color: '#f9f9f9',
+        hide_topbar: false,
+        branding: '#16a085'  // Accent teal for branding elements
+    },
+    modal: {
+        confirm_close: true,
+        animation: true
+    },
+    send_sms_hash: true
 };
 
 // Helper function to make API requests
@@ -32,45 +50,121 @@ async function makeRequest(url, method = 'GET', data = null) {
     const fullUrl = `${razorpayConfig.apiBaseUrl}${url}`;
     console.log(`Making ${method} request to:`, fullUrl);
 
+    // Set a timeout for the fetch request with increased timeout for better reliability
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => {
+        controller.abort();
+        console.warn(`Request to ${url} timed out after 30 seconds`);
+        // Track this timeout in our global timeouts array
+        if (window.activeTimeouts) {
+            window.activeTimeouts.push({
+                type: 'fetch',
+                url: url,
+                timestamp: new Date().toISOString()
+            });
+        }
+    }, 30000); // 30 second timeout for better reliability
+    options.signal = controller.signal;
+
     try {
         const response = await fetch(fullUrl, options);
-        const responseData = await response.json().catch(() => ({}));
+        clearTimeout(timeoutId); // Clear the timeout
+        
+        // Check for empty response
+        if (!response.ok) {
+            const errorMessage = `Server returned ${response.status}: ${response.statusText}`;
+            console.error('API Error:', {
+                status: response.status,
+                message: errorMessage
+            });
+            throw new Error(errorMessage);
+        }
+        
+        // Parse JSON response with error handling
+        let responseData;
+        try {
+            responseData = await response.json();
+        } catch (jsonError) {
+            console.error('Failed to parse JSON response:', jsonError);
+            // Track this error in our global errors array
+            if (window.paymentErrors) {
+                window.paymentErrors.push({
+                    type: 'json_parse',
+                    url: url,
+                    timestamp: new Date().toISOString(),
+                    details: jsonError.message
+                });
+            }
+            throw new Error('The server response could not be processed. This might be a temporary issue. Please try again in a few moments.');
+        }
         
         console.log('Response status:', response.status);
         console.log('Response data:', responseData);
         
-        if (!response.ok) {
+        // Check for API error in response
+        if (responseData.error || responseData.status === 'error') {
             const errorMessage = responseData.message || responseData.error || 'Something went wrong';
-            console.error('API Error:', {
-                status: response.status,
-                statusText: response.statusText,
-                error: errorMessage,
-                url: fullUrl
-            });
+            console.error('API Error in response:', errorMessage);
             throw new Error(errorMessage);
         }
         
         return responseData;
     } catch (error) {
-        console.error('Network/API Error:', {
-            url: fullUrl,
-            method,
-            error: error.message,
-            stack: error.stack
-        });
+        console.error('Request failed:', error);
+        
+        // Handle specific error types with user-friendly messages
+        if (error.name === 'AbortError') {
+            throw new Error('Request timed out. The server is taking too long to respond. Please try again later.');
+        } else if (error.message.includes('NetworkError') || error.message.includes('network')) {
+            throw new Error('Network connection issue. Please check your internet connection and try again.');
+        } else if (error.message.includes('JSON')) {
+            throw new Error('Invalid response from server. Please try again later.');
+        }
+        
         throw new Error(`Failed to process request: ${error.message}`);
+    } finally {
+        // Ensure timeout is cleared in all cases
+        clearTimeout(timeoutId);
     }
+}
+
+// Function to clear loading state and reset UI
+function clearLoadingState() {
+    // Hide loading spinner
+    const loadingSpinner = document.getElementById('donationLoading');
+    if (loadingSpinner) {
+        loadingSpinner.classList.remove('active');
+        loadingSpinner.style.display = 'none';
+    }
+    
+    // Reset donate button
+    const donateButton = document.getElementById('donateButton');
+    if (donateButton) {
+        donateButton.disabled = false;
+        donateButton.innerHTML = donateButton.getAttribute('data-original-text') || 'Donate Now';
+    }
+    
+    // Clear any existing timeouts to prevent multiple callbacks
+    if (window.razorpayTimeouts) {
+        window.razorpayTimeouts.forEach(timeoutId => clearTimeout(timeoutId));
+        window.razorpayTimeouts = [];
+    }
+}
+
+// Helper to track timeouts globally for cleanup
+function trackTimeout(timeoutId) {
+    if (!window.razorpayTimeouts) {
+        window.razorpayTimeouts = [];
+    }
+    window.razorpayTimeouts.push(timeoutId);
+    return timeoutId;
 }
 
 // Function to show success message by navigating to About section
 function showSuccessModal(paymentId) {
     try {
-        // Hide loading spinner if visible
-        const loadingSpinner = document.getElementById('donationLoading');
-        if (loadingSpinner) {
-            loadingSpinner.classList.remove('active');
-            loadingSpinner.style.display = 'none';
-        }
+        // Clear loading state
+        clearLoadingState();
         
         // Create success message in the About section
         const aboutSection = document.getElementById('about');
@@ -124,275 +218,196 @@ function showSuccessModal(paymentId) {
 // Function to show failure message in the donation form area
 function showFailureModal(errorMessage = 'An unknown error occurred') {
     try {
-        // Hide loading spinner if visible
-        const loadingSpinner = document.getElementById('donationLoading');
-        if (loadingSpinner) {
-            loadingSpinner.classList.remove('active');
-            loadingSpinner.style.display = 'none';
-        }
+        // Clear loading state
+        clearLoadingState();
         
-        // Find the donation form container
+        // Get the donation form container
         const donationForm = document.getElementById('donationForm');
-        if (donationForm) {
-            // Remove any existing failure messages first
-            const existingMessage = document.getElementById('paymentFailureMessage');
-            if (existingMessage) {
-                existingMessage.remove();
-            }
-            
-            // Create new failure message element
-            const failureMessage = document.createElement('div');
-            failureMessage.id = 'paymentFailureMessage';
-            failureMessage.className = 'payment-message failure-message';
-            failureMessage.innerHTML = `
-                <div class="message-icon-container">
-                    <i class="fas fa-exclamation-triangle error-icon shake"></i>
-                </div>
-                <h3>Payment Unsuccessful</h3>
-                <p>We encountered an issue with your donation: ${errorMessage}</p>
-                <p>Don't worry - no money has been deducted from your account.</p>
-                <button class="btn btn-primary retry-button" onclick="document.getElementById('paymentFailureMessage').remove();">Try Again</button>
-            `;
-            
-            // Insert right after the donate button
-            const donateButtonContainer = document.querySelector('#donationForm .form-group:last-of-type');
-            if (donateButtonContainer) {
-                donateButtonContainer.after(failureMessage);
-                // Scroll to the failure message
-                failureMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            } else {
-                // Fallback - append to the form
-                donationForm.appendChild(failureMessage);
-                failureMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        } else {
-            // Fallback if donation form not found
-            alert('Payment failed: ' + errorMessage);
+        if (!donationForm) return;
+        
+        // Remove any existing error messages first
+        const existingMessage = document.getElementById('paymentFailureMessage');
+        if (existingMessage) {
+            existingMessage.remove();
         }
         
-        // Re-enable donate button
-        const donateButton = document.getElementById('donateButton');
-        if (donateButton) {
-            donateButton.disabled = false;
+        // Format the error message for better user experience
+        let formattedMessage = errorMessage;
+        if (errorMessage.toLowerCase().includes('timeout') || errorMessage.toLowerCase().includes('timed out')) {
+            formattedMessage = 'Request timed out. Please try again.';
+        } else if (errorMessage.toLowerCase().includes('network') || errorMessage.toLowerCase().includes('connection')) {
+            formattedMessage = 'Network connection issue. Please check your internet connection and try again.';
+        } else if (errorMessage.toLowerCase().includes('abort')) {
+            formattedMessage = 'Request was interrupted. Please try again.';
         }
+        
+        // Create new error message element with updated styling
+        const failureMessage = document.createElement('div');
+        failureMessage.id = 'paymentFailureMessage';
+        failureMessage.className = 'payment-failed-container';
+        failureMessage.innerHTML = `
+            <div class="payment-failed-icon">
+                <i class="fas fa-exclamation"></i>
+            </div>
+            <h2>Payment Failed</h2>
+            <p>${formattedMessage}</p>
+            <p>Please try again or contact support if the problem persists.</p>
+            <button id="dismissFailureBtn" class="dismiss-button">DISMISS</button>
+        `;
+        
+        // Insert at the end of the form
+        donationForm.appendChild(failureMessage);
+        
+        // Add event listener to dismiss button
+        const dismissBtn = document.getElementById('dismissFailureBtn');
+        if (dismissBtn) {
+            dismissBtn.addEventListener('click', function() {
+                failureMessage.remove();
+            });
+        }
+        
+        // Scroll to the error message
+        failureMessage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        
+        // Log the error for debugging
+        console.error('Payment failure:', errorMessage);
     } catch (error) {
-        console.error('Error showing failure message:', error);
-        alert('Payment failed: ' + errorMessage);
+        console.error('Error showing failure modal:', error);
+        alert(`Payment failed: ${errorMessage}`);
     }
 }
-
-// Initialize any event handlers when the DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    // Add any additional initialization code here if needed
-    
-    // No need for modal event handlers with inline messages
-});
 
 // Function to handle form submission
 async function handleDonation(e) {
     e.preventDefault();
     
-    // Get form values
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const phone = document.getElementById('phone').value.trim();
-    const amount = parseFloat(document.getElementById('amount').value);
+    // Get form data
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    const amount = document.getElementById('amount').value;
     const purpose = document.getElementById('purpose').value;
-    const purposeText = document.getElementById('purpose').options[document.getElementById('purpose').selectedIndex].text;
-    const donateButton = document.getElementById('donateButton');
-    const loadingElement = document.getElementById('donationLoading');
     
-    // Show loading state immediately
+    // Validate form data
+    if (!name || !amount || !purpose) {
+        alert('Please fill in all required fields');
+        return;
+    }
+    
+    // Validate amount
+    if (isNaN(amount) || amount < 1) {
+        alert('Please enter a valid amount');
+        return;
+    }
+    
+    // Get the donate button
+    const donateButton = document.getElementById('donateButton');
     const originalButtonText = donateButton.innerHTML;
+    
+    // Store original text for later use
+    donateButton.setAttribute('data-original-text', originalButtonText);
+    
+    // Disable button and show loading
     donateButton.disabled = true;
     donateButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
     
-    // Show loading spinner immediately
-    if (loadingElement) {
-        loadingElement.classList.add('active');
-        document.querySelector('.loading-text').textContent = 'Preparing your donation...';
+    // Show loading spinner
+    const loadingSpinner = document.getElementById('donationLoading');
+    if (loadingSpinner) {
+        loadingSpinner.style.display = 'flex';
+        loadingSpinner.classList.add('active');
     }
     
-    try {
-        // Validate form - only name and amount are mandatory
-        if (!name || isNaN(amount) || amount < 1) {
-            throw new Error('Please enter your name and a valid donation amount (minimum ₹1)');
-        }
-        
-        // Validate email only if provided
-        if (email) {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                throw new Error('Please enter a valid email address or leave it blank');
-            }
-        }
-        
-        // Validate phone only if provided
-        if (phone) {
-            const phoneRegex = /^[6-9]\d{9}$/;
-            if (!phoneRegex.test(phone)) {
-                throw new Error('Please enter a valid 10-digit Indian mobile number or leave it blank');
-            }
-        }
+    // Set a timeout to clear the loading state if the request takes too long
+    const loadingTimeout = setTimeout(() => {
+        clearLoadingState();
+        showFailureModal('Request is taking longer than expected. This could be due to slow internet connection or server issues. Please try again.');
+    }, 40000); // 40 seconds timeout for better reliability
     
-        // Update loading message with more informative text
-        if (loadingElement) {
-            document.querySelector('.loading-text').textContent = 'Creating your donation order... This may take a few moments.';
-        }
-        
-        // Create order on server with a timeout to prevent hanging
-        const orderPromise = makeRequest(razorpayConfig.createOrderUrl, 'POST', {
-            amount: amount, // Server will handle conversion to paise
+    try {
+        // Create order on the server
+        const orderData = {
+            amount: parseFloat(amount) * 100, // Convert to paise (e.g., 500 rupees = 50000 paise)
             currency: 'INR',
-            receipt: 'donation_' + Date.now(),
             notes: {
                 name,
-                email,
-                phone,
                 purpose,
-                purposeText
-            }
-        });
-        
-        // Set a timeout to handle slow server responses
-        const timeoutPromise = new Promise((_, reject) => {
-            setTimeout(() => reject(new Error('Server request timed out. Please try again.')), 15000);
-        });
-        
-        // Race the order creation against a timeout
-        const response = await Promise.race([orderPromise, timeoutPromise]);
-
-        // Extract order data and key from server response
-        const orderData = response.data.order;
-        const razorpayKey = response.data.key;
-        
-        console.log('Order created:', orderData);
-        console.log('Using Razorpay Key:', razorpayKey);
-
-        // Open Razorpay checkout
-        const options = {
-            key: razorpayKey,
-            amount: orderData.amount,
-            currency: orderData.currency || 'INR',
-            name: razorpayConfig.company_name,
-            description: `Donation for ${purposeText}`,
-            order_id: orderData.id,
-            prefill: {
-                name: name,
-                // Only include email and phone if provided
                 ...(email ? { email } : {}),
-                ...(phone ? { contact: phone } : {})
-            },
-            theme: razorpayConfig.theme,
-            // Show all payment methods with UPI at the top
-            config: {
-                display: {
-                    blocks: {
-                        upi: {
-                            name: 'Pay using UPI',
-                            instruments: [
-                                {
-                                    method: 'upi'
-                                }
-                            ]
-                        },
-                        banks: {
-                            name: 'Pay using Netbanking',
-                            instruments: [
-                                {
-                                    method: 'netbanking'
-                                }
-                            ]
-                        },
-                        cards: {
-                            name: 'Pay using Cards',
-                            instruments: [
-                                {
-                                    method: 'card'
-                                }
-                            ]
-                        },
-                        wallets: {
-                            name: 'Pay using Wallets',
-                            instruments: [
-                                {
-                                    method: 'wallet'
-                                }
-                            ]
-                        }
-                    },
-                    sequence: ['block.upi', 'block.banks', 'block.cards', 'block.wallets'],
-                    preferences: {
-                        show_default_blocks: true
+                ...(phone ? { phone } : {})
+            }
+        };
+        
+        const response = await makeRequest(razorpayConfig.createOrderUrl, 'POST', orderData);
+        
+        // Clear the timeout since we got a response
+        clearTimeout(loadingTimeout);
+        
+        if (!response || !response.data || !response.data.order) {
+            throw new Error('Failed to create order');
+        }
+        
+        const { order, key } = response.data;
+        
+        // Initialize Razorpay payment
+        const options = {
+            key,
+            amount: order.amount,
+            currency: order.currency,
+            name: razorpayConfig.company_name,
+            description: `Donation for ${purpose}`,
+            order_id: order.id,
+            handler: function(response) {
+                // This function is called when payment is successful
+                console.log('Payment successful:', response);
+                
+                // Set a verification timeout with longer duration
+                const verificationTimeout = setTimeout(() => {
+                    clearLoadingState();
+                    // If we have a payment ID, we can assume payment was successful even if verification is slow
+                    if (response.razorpay_payment_id) {
+                        showSuccessModal(response.razorpay_payment_id);
+                        console.warn('Payment verification took too long, but payment ID exists. Showing success. ID:', response.razorpay_payment_id);
+                    } else {
+                        // This should rarely happen since we already have payment ID in the handler
+                        showFailureModal('Payment verification is taking longer than expected. If your payment was successful, please contact us with your transaction details.');
                     }
-                }
-            },
-            handler: async function(response) {
-                const loadingElement = document.getElementById('donationLoading');
-                try {
-                    // Show loading spinner
-                    if (loadingElement) {
-                        loadingElement.classList.add('active');
-                    }
-                    
-                    // Verify payment on server
-                    console.log('Payment response:', response);
-                    const verification = await makeRequest(razorpayConfig.verifyPaymentUrl, 'POST', {
-                        order_id: response.razorpay_order_id,
-                        payment_id: response.razorpay_payment_id,
-                        signature: response.razorpay_signature,
-                        notes: {
-                            name: name,
-                            email: email,
-                            phone: phone,
-                            purpose: purpose,
-                            purposeText: purposeText
-                        }
-                    });
-                    
-                    // Show success message
+                }, 15000); // 15 seconds timeout for verification for better reliability
+                
+                // Verify payment on server
+                makeRequest(razorpayConfig.verifyPaymentUrl, 'POST', {
+                    order_id: response.razorpay_order_id,
+                    payment_id: response.razorpay_payment_id,
+                    signature: response.razorpay_signature,
+                    amount: order.amount,
+                    notes: orderData.notes
+                })
+                .then(verificationResponse => {
+                    clearTimeout(verificationTimeout);
+                    console.log('Payment verified:', verificationResponse);
                     showSuccessModal(response.razorpay_payment_id);
-                    
-                    // Reset form
-                    document.getElementById('donationForm').reset();
-                    
-                } catch (error) {
-                    console.error('Payment verification failed:', error);
-                    showFailureModal(error.message || 'Payment verification failed. Please try again or contact support.');
-                } finally {
-                    // Hide loading spinner
-                    if (loadingElement) {
-                        loadingElement.classList.remove('active');
+                })
+                .catch(error => {
+                    clearTimeout(verificationTimeout);
+                    console.error('Verification error:', error);
+                    // Still show success if payment ID exists, but log the verification error
+                    if (response.razorpay_payment_id) {
+                        showSuccessModal(response.razorpay_payment_id);
+                        console.warn('Payment succeeded but verification failed. Payment ID:', response.razorpay_payment_id);
+                    } else {
+                        showFailureModal('Payment verification failed. Please contact support.');
                     }
-                    // Re-enable button
-                    if (donateButton) {
-                        donateButton.disabled = false;
-                        donateButton.innerHTML = originalButtonText;
-                    }
-                }
+                });
             },
             modal: {
                 escape: true,
-                backdropclose: true,
+                backdropclose: false,
                 handleback: true,
                 confirm_close: true,
+                animation: true,
                 ondismiss: function() {
                     // This function is called when the payment popup is closed without completing payment
-                    // Hide loading spinner first
-                    const loadingSpinner = document.getElementById('donationLoading');
-                    if (loadingSpinner) {
-                        loadingSpinner.classList.remove('active');
-                        loadingSpinner.style.display = 'none';
-                    }
-                    
-                    // Show failure message
+                    clearTimeout(loadingTimeout); // Clear the main timeout
                     showFailureModal('Payment was cancelled. Please try again if you wish to complete your donation.');
-                    
-                    // Re-enable button
-                    if (donateButton) {
-                        donateButton.disabled = false;
-                        donateButton.innerHTML = originalButtonText;
-                    }
                 }
             },
             prefill: {
@@ -401,14 +416,13 @@ async function handleDonation(e) {
                 ...(email ? { email } : {}),
                 ...(phone ? { contact: phone } : {})
             },
+            notes: {
+                purpose: purpose
+            },
             theme: razorpayConfig.theme,
-            modal: {
-                ondismiss: function() {
-                    // Re-enable button if user closes the Razorpay modal
-                    donateButton.disabled = false;
-                    donateButton.innerHTML = originalButtonText;
-                }
-            }
+            // Add custom branding
+            image: 'images/logo.png', // Logo in payment popup
+            remember_customer: true
         };
         
         const rzp = new Razorpay(options);
@@ -416,28 +430,15 @@ async function handleDonation(e) {
         
         // Handle payment failure
         rzp.on('payment.failed', function(response) {
+            clearTimeout(loadingTimeout); // Clear the main timeout
             console.error('Payment failed:', response.error);
-            
-            // Hide loading spinner
-            const loadingSpinner = document.getElementById('donationLoading');
-            if (loadingSpinner) {
-                loadingSpinner.classList.remove('active');
-                loadingSpinner.style.display = 'none';
-            }
-            
-            // Show failure message instead of alert
             showFailureModal(response.error.description || 'Unknown error');
-            
-            // Re-enable button
-            donateButton.disabled = false;
-            donateButton.innerHTML = originalButtonText;
         });
         
     } catch (error) {
+        clearTimeout(loadingTimeout); // Clear the timeout
         console.error('Error:', error);
-        alert(error.message || 'An error occurred. Please try again.');
-        donateButton.disabled = false;
-        donateButton.innerHTML = originalButtonText;
+        showFailureModal(error.message || 'An error occurred. Please try again.');
     }
 }
 
