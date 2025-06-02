@@ -8,19 +8,14 @@
     <meta name="author" content="Noor Charitable Trust">
     <title>Noor Charitable Trust</title>
     <link rel="stylesheet" href="css/styles.css">
-    <link rel="stylesheet" href="css/contact-styles.css">
-    <link rel="stylesheet" href="css/gallery.css">
-    <link rel="stylesheet" href="css/values-grid.css">
-    <link rel="stylesheet" href="css/story-section.css">
-    <link rel="stylesheet" href="css/donation.css">
     <link rel="stylesheet" href="css/color-harmony.css">
-    <link rel="stylesheet" href="css/gallery-fix.css">
-    <link rel="stylesheet" href="css/soft-pastel-theme.css">
+    <link rel="stylesheet" href="css/pastel-theme.css">
+    <link rel="stylesheet" href="css/donation-form.css">
     <link rel="stylesheet" href="css/donation-info.css">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/performance.css">
+    <!-- Favicon removed to eliminate 404 error -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&family=Source+Sans+Pro:wght@400;600;700&family=Poppins:wght@500;600&family=Inter:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="css/donation-form.css">
     
     <!-- Razorpay SDK -->
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
@@ -212,50 +207,59 @@
                     <p>Glimpses of our work and impact in the community</p>
                 </div>
                 
-                <div class="gallery-grid">
-                    <!-- Gallery Item 1 -->
-                    <div class="gallery-item" style="--animation-order: 1;">
-                        <img src="images/gallery/photo1.jpg" alt="Gallery Image 1">
-                        <div class="gallery-item-caption">
-                            <h3>Our Work</h3>
-                            <p>Making a difference in the community</p>
+                <div class="slideshow-container" id="gallerySlideshow" style="position: relative; max-width: 1000px; margin: 2rem auto; height: 500px; border-radius: 10px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);">
+                    <!-- Slides -->
+                    <div class="slide fade" style="display: none; width: 100%; height: 100%; position: relative;">
+                        <img src="images/gallery/photo1.jpg" alt="Gallery Image 1" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div class="slide-caption" style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent); color: white; padding: 20px; text-align: center;">
+                            <h3 style="margin: 0 0 10px 0; font-size: 1.5rem;">Our Work</h3>
+                            <p style="margin: 0; font-size: 1.1rem;">Making a difference in the community</p>
                         </div>
                     </div>
                     
-                    <!-- Gallery Item 2 -->
-                    <div class="gallery-item" style="--animation-order: 2;">
-                        <img src="images/gallery/photo2.jpg" alt="Gallery Image 2">
-                        <div class="gallery-item-caption">
-                            <h3>Community Impact</h3>
-                            <p>Supporting those in need</p>
+                    <div class="slide fade" style="display: none; width: 100%; height: 100%; position: relative;">
+                        <img src="images/gallery/photo2.jpg" alt="Gallery Image 2" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div class="slide-caption" style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent); color: white; padding: 20px; text-align: center;">
+                            <h3 style="margin: 0 0 10px 0; font-size: 1.5rem;">Community Impact</h3>
+                            <p style="margin: 0; font-size: 1.1rem;">Supporting those in need</p>
                         </div>
                     </div>
                     
-                    <!-- Gallery Item 3 -->
-                    <div class="gallery-item" style="--animation-order: 3;">
-                        <img src="images/gallery/photo3.jpg" alt="Gallery Image 3">
-                        <div class="gallery-item-caption">
-                            <h3>Health Initiatives</h3>
-                            <p>Providing essential healthcare services</p>
+                    <div class="slide fade" style="display: none; width: 100%; height: 100%; position: relative;">
+                        <img src="images/gallery/photo3.jpg" alt="Gallery Image 3" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div class="slide-caption" style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent); color: white; padding: 20px; text-align: center;">
+                            <h3 style="margin: 0 0 10px 0; font-size: 1.5rem;">Health Initiatives</h3>
+                            <p style="margin: 0; font-size: 1.1rem;">Providing essential healthcare services</p>
                         </div>
                     </div>
                     
-                    <!-- Gallery Item 4 -->
-                    <div class="gallery-item" style="--animation-order: 4;">
-                        <img src="images/gallery/photo4.jpg" alt="Gallery Image 4">
-                        <div class="gallery-item-caption">
-                            <h3>Education Programs</h3>
-                            <p>Empowering through knowledge</p>
+                    <div class="slide fade" style="display: none; width: 100%; height: 100%; position: relative;">
+                        <img src="images/gallery/photo4.jpg" alt="Gallery Image 4" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div class="slide-caption" style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent); color: white; padding: 20px; text-align: center;">
+                            <h3 style="margin: 0 0 10px 0; font-size: 1.5rem;">Education Programs</h3>
+                            <p style="margin: 0; font-size: 1.1rem;">Empowering through knowledge</p>
                         </div>
                     </div>
                     
-                    <!-- Gallery Item 5 -->
-                    <div class="gallery-item" style="--animation-order: 5;">
-                        <img src="images/gallery/photo5.jpg" alt="Gallery Image 5">
-                        <div class="gallery-item-caption">
-                            <h3>Community Events</h3>
-                            <p>Bringing people together</p>
+                    <div class="slide fade" style="display: none; width: 100%; height: 100%; position: relative;">
+                        <img src="images/gallery/photo5.jpg" alt="Gallery Image 5" style="width: 100%; height: 100%; object-fit: cover;">
+                        <div class="slide-caption" style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent); color: white; padding: 20px; text-align: center;">
+                            <h3 style="margin: 0 0 10px 0; font-size: 1.5rem;">Community Events</h3>
+                            <p style="margin: 0; font-size: 1.1rem;">Bringing people together</p>
                         </div>
+                    </div>
+                    
+                    <!-- Navigation buttons -->
+                    <a class="prev" onclick="moveSlide(-1)" style="position: absolute; top: 50%; left: 20px; transform: translateY(-50%); background-color: rgba(0, 0, 0, 0.5); color: white; font-size: 24px; padding: 15px; border-radius: 50%; cursor: pointer; z-index: 10; text-decoration: none; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">❮</a>
+                    <a class="next" onclick="moveSlide(1)" style="position: absolute; top: 50%; right: 20px; transform: translateY(-50%); background-color: rgba(0, 0, 0, 0.5); color: white; font-size: 24px; padding: 15px; border-radius: 50%; cursor: pointer; z-index: 10; text-decoration: none; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">❯</a>
+                    
+                    <!-- Dots/circles -->
+                    <div style="text-align: center; position: absolute; bottom: 100px; width: 100%;">
+                        <span class="dot" onclick="currentSlide(1)" style="cursor: pointer; height: 15px; width: 15px; margin: 0 5px; background-color: #bbb; border-radius: 50%; display: inline-block; transition: background-color 0.6s ease;"></span>
+                        <span class="dot" onclick="currentSlide(2)" style="cursor: pointer; height: 15px; width: 15px; margin: 0 5px; background-color: #bbb; border-radius: 50%; display: inline-block; transition: background-color 0.6s ease;"></span>
+                        <span class="dot" onclick="currentSlide(3)" style="cursor: pointer; height: 15px; width: 15px; margin: 0 5px; background-color: #bbb; border-radius: 50%; display: inline-block; transition: background-color 0.6s ease;"></span>
+                        <span class="dot" onclick="currentSlide(4)" style="cursor: pointer; height: 15px; width: 15px; margin: 0 5px; background-color: #bbb; border-radius: 50%; display: inline-block; transition: background-color 0.6s ease;"></span>
+                        <span class="dot" onclick="currentSlide(5)" style="cursor: pointer; height: 15px; width: 15px; margin: 0 5px; background-color: #bbb; border-radius: 50%; display: inline-block; transition: background-color 0.6s ease;"></span>
                     </div>
                     
                     <!-- Gallery Item 6 -->
@@ -321,12 +325,12 @@
                     <input type="text" id="name" name="name" placeholder="Enter your full name" required>
                 </div>
                 <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+                    <label for="email">Email Address (Optional)</label>
+                    <input type="email" id="email" name="email" placeholder="Enter your email address">
                 </div>
                 <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+                    <label for="phone">Phone Number (Optional)</label>
+                    <input type="tel" id="phone" name="phone" placeholder="Enter your phone number">
                 </div>
                 <div class="form-group">
                     <label for="amount">Donation Amount (₹)</label>
@@ -345,49 +349,20 @@
                 <div class="form-group">
                     <button type="submit" id="donateButton" class="donate-button">Donate Now</button>
                 </div>
+                
+                <!-- Payment messages will be dynamically inserted here by JavaScript -->
             </form>
         </div>
     </div>
 </section>
 
-<!-- Success Modal -->
-<div id="successModal" class="modal">
-    <div class="modal-content">
-        <span class="close" aria-label="Close modal">&times;</span>
-        <div class="success-content">
-            <i class="fas fa-check-circle success-icon"></i>
-            <h2>Thank You for Your Donation!</h2>
-            <p>Your contribution will help us make a difference in the lives of those in need.</p>
-            <p>Payment ID: <span id="paymentId"></span></p>
-            <div class="modal-actions">
-                <button class="btn" onclick="window.location.href='index.html#donate'">Donate Again</button>
-                <button class="btn btn-secondary" onclick="document.getElementById('successModal').style.display='none'">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+<!-- Payment messages are now dynamically created and inserted by JavaScript -->
 
-<!-- Failure Modal -->
-<div id="failureModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="document.getElementById('failureModal').style.display='none'">&times;</span>
-        <div class="error-content">
-            <i class="fas fa-times-circle error-icon"></i>
-            <h2>Payment Failed</h2>
-            <p>We're sorry, but there was an issue processing your donation. Please try again or contact support if the problem persists.</p>
-            <p>Error: <span id="errorMessage"></span></p>
-            <div class="modal-actions">
-                <button class="btn" onclick="document.getElementById('failureModal').style.display='none'; document.getElementById('donationForm').scrollIntoView({behavior: 'smooth'})">Try Again</button>
-                <button class="btn btn-secondary" onclick="window.location.href='contact.html'">Contact Support</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Loading Spinner -->
+<!-- Loading Spinner with Enhanced Feedback -->
 <div class="donation-loading" id="donationLoading">
     <div class="spinner"></div>
     <div class="loading-text">Processing your donation...</div>
+    <div class="loading-subtext">This may take a few moments. Please don't close this window.</div>
 </div>
 
 
@@ -470,17 +445,17 @@
         </div>
     </section>
 
-    <footer>
+    <footer style="color: #000000 !important;">
         <div class="container">
-            <p> 2025 Noor Charitable Trust. All rights reserved.</p>
-            <p>Developed by UDAY RAMA RAO</p>
+            <p style="color: #000000 !important;"> 2025 Noor Charitable Trust. All rights reserved.</p>
+            <p style="color: #000000 !important;">Developed by UDAY RAMA RAO</p>
             <div class="footer-links">
-                <a href="#about">About</a>
-                <a href="#donate">Donate</a>
-                <a href="#contact">Contact</a>
-                <a href="legal/privacy-policy.html">Privacy Policy</a>
-                <a href="legal/terms-conditions.html">Terms & Conditions</a>
-                <a href="legal/refund-policy.html">Refund Policy</a>
+                <a href="#about" style="color: #000000 !important;">About</a>
+                <a href="#donate" style="color: #000000 !important;">Donate</a>
+                <a href="#contact" style="color: #000000 !important;">Contact</a>
+                <a href="legal/privacy-policy.html" style="color: #000000 !important;">Privacy Policy</a>
+                <a href="legal/terms-conditions.html" style="color: #000000 !important;">Terms & Conditions</a>
+                <a href="legal/refund-policy.html" style="color: #000000 !important;">Refund Policy</a>
             </div>
         </div>
     </footer>
@@ -492,7 +467,7 @@
 
 
     <script src="js/main.js"></script>
-    <script src="js/gallery.js"></script>
+    <script src="js/slideshow.js"></script>
 
     <!-- Women Empowerment Modal -->
     <div id="womenEmpowermentModal" class="modal">
@@ -503,7 +478,21 @@
         </div>
     </div>
 
-    <!-- Razorpay Integration Script -->
-    <script src="js/razorpay-config.js"></script>
+    <!-- Razorpay Integration is already loaded in the head section -->
+    
+    <!-- Gallery Modal -->
+    <div id="galleryModal" class="modal gallery-modal">
+        <div class="modal-content gallery-modal-content">
+            <span id="galleryModalClose" class="close" aria-label="Close modal">×</span>
+            <img id="galleryModalImg" src="" alt="Gallery Image" class="gallery-modal-img">
+            <div class="gallery-modal-info">
+                <h3 id="galleryModalTitle"></h3>
+                <p id="galleryModalDesc"></p>
+            </div>
+            <button id="galleryPrev" class="gallery-nav prev">❮</button>
+            <button id="galleryNext" class="gallery-nav next">❯</button>
+            <button id="goHomeBtn" class="button">Back to Home</button>
+        </div>
+    </div>
 </body>
 </html>

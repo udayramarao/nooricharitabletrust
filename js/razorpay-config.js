@@ -62,78 +62,130 @@ async function makeRequest(url, method = 'GET', data = null) {
     }
 }
 
-// Function to show success modal
+// Function to show success message by navigating to About section
 function showSuccessModal(paymentId) {
-    const modal = document.getElementById('successModal');
-    const paymentIdElement = document.getElementById('paymentId');
-    
     try {
-        // Set payment ID if element exists
-        if (paymentIdElement) {
-            paymentIdElement.textContent = paymentId || 'N/A';
+        // Hide loading spinner if visible
+        const loadingSpinner = document.getElementById('donationLoading');
+        if (loadingSpinner) {
+            loadingSpinner.classList.remove('active');
+            loadingSpinner.style.display = 'none';
         }
         
-        // Show modal
-        if (modal) {
-            modal.style.display = 'block';
-            document.body.classList.add('modal-open');
+        // Create success message in the About section
+        const aboutSection = document.getElementById('about');
+        if (aboutSection) {
+            // Remove any existing success messages first
+            const existingMessage = document.getElementById('paymentSuccessMessage');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            
+            // Create new success message element
+            const successMessage = document.createElement('div');
+            successMessage.id = 'paymentSuccessMessage';
+            successMessage.className = 'payment-message success-message';
+            successMessage.innerHTML = `
+                <div class="message-icon-container">
+                    <i class="fas fa-check-circle success-icon pulse"></i>
+                </div>
+                <h3>Thank you for your donation!</h3>
+                <p>Every rupee is important in this journey and congrats for being part of our mission.</p>
+                <p>Payment ID: <span class="highlight-text">${paymentId || 'N/A'}</span></p>
+            `;
+            
+            // Insert at the beginning of the About section
+            aboutSection.insertBefore(successMessage, aboutSection.firstChild);
+            
+            // Scroll to the About section
+            aboutSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         } else {
-            // Fallback to alert if modal doesn't exist
+            // Fallback if About section not found
             alert('Thank you for your donation! Payment ID: ' + (paymentId || 'N/A'));
         }
+        
+        // Reset form
+        const donationForm = document.getElementById('donationForm');
+        if (donationForm) {
+            donationForm.reset();
+        }
+        
+        // Re-enable donate button
+        const donateButton = document.getElementById('donateButton');
+        if (donateButton) {
+            donateButton.disabled = false;
+        }
     } catch (error) {
-        console.error('Error showing success modal:', error);
-        // Fallback to alert if modal fails
+        console.error('Error showing success message:', error);
         alert('Thank you for your donation! Payment ID: ' + (paymentId || 'N/A'));
     }
 }
 
-// Function to show failure modal
+// Function to show failure message in the donation form area
 function showFailureModal(errorMessage = 'An unknown error occurred') {
-    const modal = document.getElementById('failureModal');
-    const errorMessageElement = document.getElementById('errorMessage');
-    
     try {
-        // Set error message if element exists
-        if (errorMessageElement) {
-            errorMessageElement.textContent = errorMessage;
+        // Hide loading spinner if visible
+        const loadingSpinner = document.getElementById('donationLoading');
+        if (loadingSpinner) {
+            loadingSpinner.classList.remove('active');
+            loadingSpinner.style.display = 'none';
         }
         
-        // Show modal
-        if (modal) {
-            modal.style.display = 'block';
-            document.body.classList.add('modal-open');
+        // Find the donation form container
+        const donationForm = document.getElementById('donationForm');
+        if (donationForm) {
+            // Remove any existing failure messages first
+            const existingMessage = document.getElementById('paymentFailureMessage');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            
+            // Create new failure message element
+            const failureMessage = document.createElement('div');
+            failureMessage.id = 'paymentFailureMessage';
+            failureMessage.className = 'payment-message failure-message';
+            failureMessage.innerHTML = `
+                <div class="message-icon-container">
+                    <i class="fas fa-exclamation-triangle error-icon shake"></i>
+                </div>
+                <h3>Payment Unsuccessful</h3>
+                <p>We encountered an issue with your donation: ${errorMessage}</p>
+                <p>Don't worry - no money has been deducted from your account.</p>
+                <button class="btn btn-primary retry-button" onclick="document.getElementById('paymentFailureMessage').remove();">Try Again</button>
+            `;
+            
+            // Insert right after the donate button
+            const donateButtonContainer = document.querySelector('#donationForm .form-group:last-of-type');
+            if (donateButtonContainer) {
+                donateButtonContainer.after(failureMessage);
+                // Scroll to the failure message
+                failureMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else {
+                // Fallback - append to the form
+                donationForm.appendChild(failureMessage);
+                failureMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
         } else {
-            // Fallback to alert if modal doesn't exist
+            // Fallback if donation form not found
             alert('Payment failed: ' + errorMessage);
         }
+        
+        // Re-enable donate button
+        const donateButton = document.getElementById('donateButton');
+        if (donateButton) {
+            donateButton.disabled = false;
+        }
     } catch (error) {
-        console.error('Error showing failure modal:', error);
-        // Fallback to alert if modal fails
+        console.error('Error showing failure message:', error);
         alert('Payment failed: ' + errorMessage);
     }
 }
 
-// Close modals when clicking the close button or outside the modal
+// Initialize any event handlers when the DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Close modals when clicking the close button
-    document.querySelectorAll('.close').forEach(closeBtn => {
-        closeBtn.onclick = function() {
-            const modal = this.closest('.modal');
-            if (modal) {
-                modal.style.display = 'none';
-                document.body.classList.remove('modal-open');
-            }
-        };
-    });
+    // Add any additional initialization code here if needed
     
-    // Close modals when clicking outside the content
-    window.onclick = function(event) {
-        if (event.target.classList.contains('modal')) {
-            event.target.style.display = 'none';
-            document.body.classList.remove('modal-open');
-        }
-    };
+    // No need for modal event handlers with inline messages
 });
 
 // Function to handle form submission
@@ -148,30 +200,48 @@ async function handleDonation(e) {
     const purpose = document.getElementById('purpose').value;
     const purposeText = document.getElementById('purpose').options[document.getElementById('purpose').selectedIndex].text;
     const donateButton = document.getElementById('donateButton');
+    const loadingElement = document.getElementById('donationLoading');
     
-    // Show loading state
+    // Show loading state immediately
     const originalButtonText = donateButton.innerHTML;
     donateButton.disabled = true;
     donateButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
     
+    // Show loading spinner immediately
+    if (loadingElement) {
+        loadingElement.classList.add('active');
+        document.querySelector('.loading-text').textContent = 'Preparing your donation...';
+    }
+    
     try {
-        // Validate form
-        if (!name || !email || !phone || isNaN(amount) || amount < 1) {
-            throw new Error('Please fill in all fields and enter a valid amount (minimum ₹1)');
+        // Validate form - only name and amount are mandatory
+        if (!name || isNaN(amount) || amount < 1) {
+            throw new Error('Please enter your name and a valid donation amount (minimum ₹1)');
         }
         
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            throw new Error('Please enter a valid email address');
+        // Validate email only if provided
+        if (email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                throw new Error('Please enter a valid email address or leave it blank');
+            }
         }
         
-        const phoneRegex = /^[6-9]\d{9}$/;
-        if (!phoneRegex.test(phone)) {
-            throw new Error('Please enter a valid 10-digit Indian mobile number');
+        // Validate phone only if provided
+        if (phone) {
+            const phoneRegex = /^[6-9]\d{9}$/;
+            if (!phoneRegex.test(phone)) {
+                throw new Error('Please enter a valid 10-digit Indian mobile number or leave it blank');
+            }
         }
     
-        // Create order on server
-        const response = await makeRequest(razorpayConfig.createOrderUrl, 'POST', {
+        // Update loading message with more informative text
+        if (loadingElement) {
+            document.querySelector('.loading-text').textContent = 'Creating your donation order... This may take a few moments.';
+        }
+        
+        // Create order on server with a timeout to prevent hanging
+        const orderPromise = makeRequest(razorpayConfig.createOrderUrl, 'POST', {
             amount: amount, // Server will handle conversion to paise
             currency: 'INR',
             receipt: 'donation_' + Date.now(),
@@ -183,6 +253,14 @@ async function handleDonation(e) {
                 purposeText
             }
         });
+        
+        // Set a timeout to handle slow server responses
+        const timeoutPromise = new Promise((_, reject) => {
+            setTimeout(() => reject(new Error('Server request timed out. Please try again.')), 15000);
+        });
+        
+        // Race the order creation against a timeout
+        const response = await Promise.race([orderPromise, timeoutPromise]);
 
         // Extract order data and key from server response
         const orderData = response.data.order;
@@ -201,8 +279,9 @@ async function handleDonation(e) {
             order_id: orderData.id,
             prefill: {
                 name: name,
-                email: email,
-                contact: phone
+                // Only include email and phone if provided
+                ...(email ? { email } : {}),
+                ...(phone ? { contact: phone } : {})
             },
             theme: razorpayConfig.theme,
             // Show all payment methods with UPI at the top
@@ -299,7 +378,16 @@ async function handleDonation(e) {
                 confirm_close: true,
                 ondismiss: function() {
                     // This function is called when the payment popup is closed without completing payment
+                    // Hide loading spinner first
+                    const loadingSpinner = document.getElementById('donationLoading');
+                    if (loadingSpinner) {
+                        loadingSpinner.classList.remove('active');
+                        loadingSpinner.style.display = 'none';
+                    }
+                    
+                    // Show failure message
                     showFailureModal('Payment was cancelled. Please try again if you wish to complete your donation.');
+                    
                     // Re-enable button
                     if (donateButton) {
                         donateButton.disabled = false;
@@ -309,8 +397,9 @@ async function handleDonation(e) {
             },
             prefill: {
                 name,
-                email,
-                contact: phone
+                // Only include email and phone if provided
+                ...(email ? { email } : {}),
+                ...(phone ? { contact: phone } : {})
             },
             theme: razorpayConfig.theme,
             modal: {
@@ -328,7 +417,18 @@ async function handleDonation(e) {
         // Handle payment failure
         rzp.on('payment.failed', function(response) {
             console.error('Payment failed:', response.error);
-            alert('Payment failed: ' + (response.error.description || 'Unknown error'));
+            
+            // Hide loading spinner
+            const loadingSpinner = document.getElementById('donationLoading');
+            if (loadingSpinner) {
+                loadingSpinner.classList.remove('active');
+                loadingSpinner.style.display = 'none';
+            }
+            
+            // Show failure message instead of alert
+            showFailureModal(response.error.description || 'Unknown error');
+            
+            // Re-enable button
             donateButton.disabled = false;
             donateButton.innerHTML = originalButtonText;
         });

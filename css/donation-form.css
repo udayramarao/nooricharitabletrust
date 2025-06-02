@@ -280,70 +280,162 @@
     top: 0;
     width: 100%;
     height: 100%;
+    overflow: auto;
     background-color: rgba(0, 0, 0, 0.7);
-    justify-content: center;
-    align-items: center;
+    animation: fadeIn 0.3s ease-out;
+    backdrop-filter: blur(5px);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
 .modal-content {
     background-color: #fff;
-    padding: 2.5rem;
-    border-radius: 12px;
-    max-width: 500px;
+    margin: 8% auto;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+    max-width: 600px;
     width: 90%;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     position: relative;
-    text-align: center;
-    animation: modalFadeIn 0.3s ease-out;
+    animation: slideDown 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.success-modal {
+    border-top: 8px solid #28a745;
+}
+
+.failure-modal {
+    border-top: 8px solid #dc3545;
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-70px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }
 
 .close {
     position: absolute;
-    right: 20px;
-    top: 15px;
+    right: 25px;
+    top: 20px;
     font-size: 28px;
     font-weight: bold;
+    color: #aaa;
     cursor: pointer;
-    color: #888;
-    transition: color 0.2s;
+    transition: all 0.2s ease;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
 }
 
-.close:hover,
-.close:focus {
-    color: #000;
-    text-decoration: none;
+.close:hover {
+    color: #333;
+    background-color: #f0f0f0;
 }
 
-.success-icon {
-    font-size: 4rem;
-    color: #4caf50;
-    margin-bottom: 1.5rem;
+.success-content, .error-content {
+    text-align: center;
+    padding: 20px 10px;
 }
 
-.success-icon i {
-    animation: bounce 0.6s;
-}
-
-@keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
-    40% {transform: translateY(-20px);}
-    60% {transform: translateY(-10px);}
-}
-
-/* Success icon */
-.success-icon,
-.error-icon {
-    font-size: 4rem;
-    margin-bottom: 1.5rem;
-    display: block;
+.success-icon-container, .error-icon-container {
+    margin-bottom: 25px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .success-icon {
-    color: #4CAF50;
+    font-size: 80px;
+    color: #28a745;
+    filter: drop-shadow(0 5px 15px rgba(40, 167, 69, 0.4));
 }
 
 .error-icon {
-    color: #f44336;
+    font-size: 80px;
+    color: #dc3545;
+    filter: drop-shadow(0 5px 15px rgba(220, 53, 69, 0.4));
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.shake {
+    animation: shake 0.8s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+@keyframes shake {
+    10%, 90% { transform: translate3d(-1px, 0, 0); }
+    20%, 80% { transform: translate3d(2px, 0, 0); }
+    30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+    40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+
+.modal-title {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 2.2rem;
+    font-weight: 700;
+}
+
+.success-content .modal-title {
+    color: #28a745;
+}
+
+.error-content .modal-title {
+    color: #dc3545;
+}
+
+.donation-message, .error-message {
+    color: #555;
+    margin-bottom: 25px;
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.payment-details, .error-details {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 20px 0;
+    border: 1px solid #e9ecef;
+}
+
+.highlight-text {
+    font-weight: 700;
+    color: #333;
+    background-color: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 0 5px;
+}
+
+.receipt-note {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-top: 10px;
+}
+
+.error-help {
+    font-style: italic;
+    color: #6c757d;
+    font-size: 0.95rem;
+    margin-top: 15px;
 }
 
 /* Animation for modal */
@@ -382,32 +474,53 @@ body.modal-open {
 
 .receipt.modal-actions {
     display: flex;
-    gap: 1rem;
     justify-content: center;
-    margin-top: 2rem;
-    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 30px;
 }
 
 .modal-actions .btn {
-    min-width: 120px;
-    margin: 0.5rem;
-    padding: 0.8rem 1.5rem;
-    border-radius: 6px;
+    padding: 12px 24px;
+    font-size: 1rem;
     font-weight: 600;
-    cursor: pointer;
+    border-radius: 30px;
     transition: all 0.3s ease;
+    min-width: 150px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: center;
     border: none;
+    cursor: pointer;
+}
+
+.modal-actions .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.modal-actions .btn:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.success-modal .btn-primary {
+    background-color: #28a745;
+    color: white;
+}
+
+.failure-modal .btn-primary {
+    background-color: #dc3545;
+    color: white;
 }
 
 .btn-primary {
-    background-color: #6a1b9a;
+    background-color: #4a90e2;
     color: white;
 }
 
 .btn-secondary {
-    background-color: #f0f0f0;
-    color: #333;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    color: #495057;
 }
 
 .btn:hover {
@@ -448,12 +561,13 @@ body.modal-open {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.85);
     z-index: 9999;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease-in-out;
 }
 
 .donation-loading.active {
@@ -461,23 +575,42 @@ body.modal-open {
 }
 
 .spinner {
-    width: 60px;
-    height: 60px;
+    width: 70px;
+    height: 70px;
     border: 6px solid rgba(255, 255, 255, 0.2);
-    border-top-color: #4a90e2;
+    border-top-color: #8e44ad;
+    border-left-color: #8e44ad;
     border-radius: 50%;
-    animation: spin 1s ease-in-out infinite;
+    animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
     margin-bottom: 20px;
-    box-shadow: 0 0 20px rgba(74, 144, 226, 0.5);
+    box-shadow: 0 0 30px rgba(142, 68, 173, 0.6);
 }
 
 .loading-text {
     color: white;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     font-weight: 500;
-    margin-top: 15px;
+    margin-top: 20px;
     text-align: center;
     max-width: 80%;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    letter-spacing: 0.5px;
+    animation: pulse-text 2s infinite;
+}
+
+@keyframes pulse-text {
+    0% { opacity: 0.8; }
+    50% { opacity: 1; }
+    100% { opacity: 0.8; }
+}
+
+.loading-subtext {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.95rem;
+    margin-top: 10px;
+    text-align: center;
+    max-width: 90%;
+    font-weight: 400;
 }
 
 @keyframes spin {
@@ -497,4 +630,83 @@ body.modal-open {
     .btn {
         width: 100%;
     }
+}
+
+/* Payment Message Styles */
+.payment-message {
+    margin: 30px 0;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    animation: fadeIn 0.5s ease-out;
+    max-width: 100%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.payment-message h3 {
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.payment-message p {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+
+.payment-message .btn {
+    margin-top: 15px;
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.payment-message .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.payment-message.success-message {
+    background-color: rgba(40, 167, 69, 0.1);
+    border: 2px solid #28a745;
+}
+
+.payment-message.failure-message {
+    background-color: rgba(220, 53, 69, 0.1);
+    border: 2px solid #dc3545;
+    margin-top: 20px;
+}
+
+.message-icon-container {
+    margin-bottom: 20px;
+}
+
+.payment-message .success-icon {
+    color: #28a745;
+    font-size: 60px;
+    animation: pulse 2s infinite;
+}
+
+.payment-message .error-icon {
+    color: #dc3545;
+    font-size: 60px;
+    animation: shake 0.5s;
+}
+
+.payment-message .highlight-text {
+    font-weight: 700;
+    color: #6a3093;
+}
+
+.payment-message .retry-button {
+    background-color: #6a3093;
+    border-color: #6a3093;
+    color: white;
+}
+
+.payment-message .retry-button:hover {
+    background-color: #5a2683;
+    border-color: #5a2683;
 }
